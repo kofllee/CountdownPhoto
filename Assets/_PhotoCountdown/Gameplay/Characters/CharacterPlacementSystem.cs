@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _PhotoCountdown.Gameplay.Slots;
 using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Characters

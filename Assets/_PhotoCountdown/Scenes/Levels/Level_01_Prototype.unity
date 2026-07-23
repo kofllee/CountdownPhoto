@@ -119,6 +119,71 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &64079990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 64079991}
+  m_Layer: 3
+  m_Name: Behaviours
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &64079991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64079990}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.3641977, y: 0.11195929, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1503262812}
+  m_Father: {fileID: 535634356}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &182741320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 182741321}
+  m_Layer: 3
+  m_Name: Behaviours
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &182741321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182741320}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1425658765}
+  - {fileID: 1676799991}
+  m_Father: {fileID: 1340419221}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261726026
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,8 +292,10 @@ GameObject:
   - component: {fileID: 535634358}
   - component: {fileID: 535634357}
   - component: {fileID: 535634361}
+  - component: {fileID: 535634362}
+  - component: {fileID: 535634363}
   m_Layer: 3
-  m_Name: Character (1)
+  m_Name: Mother
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -246,7 +313,8 @@ Transform:
   m_LocalPosition: {x: -2.65, y: -1.61, z: 0}
   m_LocalScale: {x: 1.62, y: 3.93, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 64079991}
   m_Father: {fileID: 1793221724}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &535634357
@@ -395,6 +463,33 @@ SortingGroup:
   m_SortingOrder: 0
   m_SortAtRoot: 0
   m_Sort3DAs2D: 0
+--- !u!114 &535634362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535634355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 019985826eae472682b0e177a634c07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Behaviours.CharacterBehaviourController
+--- !u!114 &535634363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535634355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6f2cec72284925bc47ee5ac4dc4780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Characters.CharacterActionDebugPresenter
+  _controller: {fileID: 535634362}
+  _renderer: {fileID: 535634360}
+  _idleColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &537555757
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +734,8 @@ GameObject:
   - component: {fileID: 1340419223}
   - component: {fileID: 1340419222}
   - component: {fileID: 1340419226}
+  - component: {fileID: 1340419228}
+  - component: {fileID: 1340419227}
   m_Layer: 3
   m_Name: Character
   m_TagString: Untagged
@@ -658,7 +755,8 @@ Transform:
   m_LocalPosition: {x: 6.04, y: -1.17, z: 0}
   m_LocalScale: {x: 1.62, y: 3.93, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 182741321}
   m_Father: {fileID: 1793221724}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1340419222
@@ -807,6 +905,33 @@ SortingGroup:
   m_SortingOrder: 0
   m_SortAtRoot: 0
   m_Sort3DAs2D: 0
+--- !u!114 &1340419227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340419220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6f2cec72284925bc47ee5ac4dc4780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Characters.CharacterActionDebugPresenter
+  _controller: {fileID: 1340419228}
+  _renderer: {fileID: 1340419225}
+  _idleColor: {r: 0.46226406, g: 0.52565473, b: 1, a: 1}
+--- !u!114 &1340419228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340419220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 019985826eae472682b0e177a634c07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Behaviours.CharacterBehaviourController
 --- !u!1 &1382286286
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +966,175 @@ Transform:
   - {fileID: 261726028}
   m_Father: {fileID: 2134845799}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1425658764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1425658765}
+  - component: {fileID: 1425658766}
+  m_Layer: 3
+  m_Name: Default
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1425658765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425658764}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 182741321}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1425658766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425658764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cad6a9dd4440eda58c54b528cfcac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Behaviours.CharacterBehaviour
+  _priority: 0
+  _phases:
+  - _action: {fileID: 0}
+    _duration: 5
+  - _action: {fileID: 11400000, guid: 0b1f5d5ccc2005d45ab7fd377c62f515, type: 2}
+    _duration: 1
+--- !u!1 &1503262811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1503262812}
+  - component: {fileID: 1503262813}
+  m_Layer: 3
+  m_Name: Default
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1503262812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503262811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 64079991}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1503262813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503262811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cad6a9dd4440eda58c54b528cfcac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Behaviours.CharacterBehaviour
+  _priority: 0
+  _phases:
+  - _action: {fileID: 0}
+    _duration: 5
+  - _action: {fileID: 11400000, guid: 0b1f5d5ccc2005d45ab7fd377c62f515, type: 2}
+    _duration: 1
+--- !u!1 &1676799990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1676799991}
+  - component: {fileID: 1676799992}
+  - component: {fileID: 1676799993}
+  m_Layer: 3
+  m_Name: NearMother
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1676799991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676799990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 182741321}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1676799992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676799990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80434c430fad4bde932347542f60bd3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Behaviours.Conditions.NeighborCondition
+  _invert: 0
+  _requiredNeighbor: {fileID: 535634358}
+--- !u!114 &1676799993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676799990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cad6a9dd4440eda58c54b528cfcac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Behaviours.CharacterBehaviour
+  _priority: 10
+  _phases:
+  - _action: {fileID: 0}
+    _duration: 6
+  - _action: {fileID: 11400000, guid: 2d23107b91b8ffd4db23bd70d73c3320, type: 2}
+    _duration: 1
+  - _action: {fileID: 0}
+    _duration: 3
+  - _action: {fileID: 11400000, guid: 0b1f5d5ccc2005d45ab7fd377c62f515, type: 2}
+    _duration: 10
 --- !u!1 &1755162101
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,6 +1146,7 @@ GameObject:
   - component: {fileID: 1755162102}
   - component: {fileID: 1755162104}
   - component: {fileID: 1755162103}
+  - component: {fileID: 1755162105}
   m_Layer: 0
   m_Name: LevelRoot
   m_TagString: Untagged
@@ -908,6 +1203,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Levels.LevelController
   _levelContentRoot: {fileID: 2134845799}
   _dragInput: {fileID: 1755162103}
+  _clock: {fileID: 1755162105}
+--- !u!114 &1755162105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755162101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc5e211b9cae4e928bed8deaa13318f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Levels.LevelClock
 --- !u!1 &1793221723
 GameObject:
   m_ObjectHideFlags: 0

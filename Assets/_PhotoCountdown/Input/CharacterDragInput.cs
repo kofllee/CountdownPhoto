@@ -1,4 +1,5 @@
 using _PhotoCountdown.Gameplay.Characters;
+using _PhotoCountdown.Gameplay.Slots;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,17 +38,17 @@ namespace _PhotoCountdown.Input
             Vector3 pointerPosition = GetPointerWorldPosition();
             Collider2D hit = Physics2D.OverlapPoint(pointerPosition, _characterMask);
 
-            if (hit == null)
+            if (!hit)
                 return;
 
             _draggedCharacter = hit.GetComponentInParent<LevelCharacter>();
 
-            if (_draggedCharacter == null)
+            if (!_draggedCharacter)
                 return;
 
             _draggedMover = _draggedCharacter.GetComponent<CharacterMover>();
 
-            if (_draggedMover == null)
+            if (!_draggedMover)
                 throw new MissingComponentException($"{_draggedCharacter.name} needs CharacterMover.");
 
             _dragOffset = _draggedCharacter.transform.position - pointerPosition;
@@ -64,7 +65,7 @@ namespace _PhotoCountdown.Input
         {
             CharacterSlot targetSlot = FindSlot(GetPointerWorldPosition());
 
-            if (targetSlot != null)
+            if (targetSlot)
                 _placement.Place(_draggedCharacter, targetSlot);
 
             _draggedMover.EndDrag();

@@ -8,17 +8,19 @@ namespace _PhotoCountdown.Gameplay.Characters
         [SerializeField] private float _moveSpeed = 12f;
         [SerializeField] private SortingGroup _sortingGroup;
         [SerializeField] private int _dragSortingOrder = 1000;
-
         
         private LevelCharacter _character;
         private int _normalSortingOrder;
         private bool _isDragging;
         private Vector3 _dragPosition;
         
-        
         public void Init(LevelCharacter levelCharacter)
         {
+            if (_sortingGroup == null)
+                throw new MissingReferenceException($"{name} has no SortingGroup.");
+
             _character = levelCharacter;
+            _normalSortingOrder = _sortingGroup.sortingOrder;
             transform.position = _character.CurrentSlot.transform.position;
         }
         
@@ -30,6 +32,7 @@ namespace _PhotoCountdown.Gameplay.Characters
         public void BeginDrag()
         {
             _isDragging = true;
+            _dragPosition = transform.position;
             _sortingGroup.sortingOrder = _dragSortingOrder;
         }
         

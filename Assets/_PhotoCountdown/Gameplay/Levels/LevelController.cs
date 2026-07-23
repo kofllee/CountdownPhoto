@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using _PhotoCountdown.Gameplay.Characters;
+using _PhotoCountdown.Gameplay.Characters.Behaviours;
+using _PhotoCountdown.Gameplay.Neighbors;
+using _PhotoCountdown.Gameplay.Slots;
 using _PhotoCountdown.Input;
 using UnityEngine;
 
@@ -9,6 +12,7 @@ namespace _PhotoCountdown.Gameplay.Levels
     {
         [SerializeField] private Transform _levelContentRoot;
         [SerializeField] private CharacterDragInput _dragInput;
+        [SerializeField] private LevelClock _clock;
                 
         private void Awake()
         {
@@ -23,8 +27,27 @@ namespace _PhotoCountdown.Gameplay.Levels
                 InitCharacterPresentation(character);
 
             CharacterPlacementSystem placement = new CharacterPlacementSystem(characters);
+            NeighborResolver neighbors = new NeighborResolver(characters);
+            
             _dragInput.Init(placement);
+            _clock.StartClock();
+            
+            foreach (LevelCharacter character in characters)
+                InitCharacterBehaviour(character, neighbors);
         }
+        
+        private void InitCharacterBehaviour(LevelCharacter character, NeighborResolver neighbors)
+        {
+            CharacterBehaviourController controller = character.GetComponent<CharacterBehaviourController>();
+
+            if (controller == null)
+            {
+                throw new MissingComponentException($"{character.name} needs CharacterBehaviourController.");
+            }
+
+            controller.Init(character, _clock, neighbors);
+        }
+
         
         private static void InitCharacterPresentation(LevelCharacter character)
         {

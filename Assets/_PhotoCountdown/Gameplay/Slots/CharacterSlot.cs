@@ -2,49 +2,52 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CharacterSlot : MonoBehaviour
+namespace _PhotoCountdown.Gameplay.Slots
 {
-    [SerializeField] private List<CharacterSlot> _neighbors = new();
-    
-    public IReadOnlyList<CharacterSlot> Neighbors => _neighbors;
-
-    public bool IsNeighbor(CharacterSlot characterSlot)
+    public class CharacterSlot : MonoBehaviour
     {
-        return _neighbors.Contains(characterSlot);
-    }
+        [SerializeField] private List<CharacterSlot> _neighbors = new();
+
+        public IReadOnlyList<CharacterSlot> Neighbors => _neighbors;
+
+        public bool IsNeighbor(CharacterSlot characterSlot)
+        {
+            return _neighbors.Contains(characterSlot);
+        }
 
 #if UNITY_EDITOR
-    private void OnValidate()
-    {
-
-        foreach (CharacterSlot neighbor in _neighbors.ToList())
+        private void OnValidate()
         {
-            if (neighbor)
-                neighbor.AddNeighborFromEditor(this);
-            
-            if(neighbor == this)
-                _neighbors.Remove(neighbor);
+
+            foreach (CharacterSlot neighbor in _neighbors.ToList())
+            {
+                if (neighbor)
+                    neighbor.AddNeighborFromEditor(this);
+
+                if (neighbor == this)
+                    _neighbors.Remove(neighbor);
+            }
         }
-    }
 
-    private void AddNeighborFromEditor(CharacterSlot slot)
-    {
-        if (!slot || slot == this || _neighbors.Contains(slot))
-            return;
-
-        _neighbors.Add(slot);
-        UnityEditor.EditorUtility.SetDirty(this);
-    }
-#endif
-    
-    private void OnDrawGizmosSelected()
-    {
-        foreach (CharacterSlot neighbor in _neighbors)
+        private void AddNeighborFromEditor(CharacterSlot slot)
         {
-            if (!neighbor)
-                continue;
+            if (!slot || slot == this || _neighbors.Contains(slot))
+                return;
 
-            Gizmos.DrawLine(transform.position, neighbor.transform.position);
+            _neighbors.Add(slot);
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
+
+        private void OnDrawGizmosSelected()
+        {
+            foreach (CharacterSlot neighbor in _neighbors)
+            {
+                if (!neighbor)
+                    continue;
+
+                Gizmos.DrawLine(transform.position, neighbor.transform.position);
+            }
         }
     }
 }
