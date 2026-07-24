@@ -1,47 +1,63 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace _PhotoCountdown.Gameplay.Characters
 {
-    public class CharacterMover: MonoBehaviour
+    public sealed class CharacterMover : MonoBehaviour
     {
         [SerializeField] private float _moveSpeed = 12f;
         [SerializeField] private SortingGroup _sortingGroup;
         [SerializeField] private int _dragSortingOrder = 1000;
-        
+
         private LevelCharacter _character;
         private int _normalSortingOrder;
         private bool _isDragging;
         private Vector3 _dragPosition;
-        
-        public void Init(LevelCharacter levelCharacter)
+
+        private void Awake()
         {
+            enabled = false;
+        }
+
+        public void Init(LevelCharacter character)
+        {
+            if (_character != null)
+                throw new InvalidOperationException($"{name} is already initialized.");
+
+            if (character == null)
+                throw new ArgumentNullException(nameof(character));
+
             if (_sortingGroup == null)
                 throw new MissingReferenceException($"{name} has no SortingGroup.");
 
-            _character = levelCharacter;
+            if (character.CurrentSlot == null)
+                throw new MissingReferenceException($"{character.name} has no current slot.");
+
+            _character = character;
             _normalSortingOrder = _sortingGroup.sortingOrder;
             transform.position = _character.CurrentSlot.transform.position;
+            enabled = true;
         }
-        
+
         public void SetDragPosition(Vector3 position)
         {
             _dragPosition = position;
         }
-        
+
         public void BeginDrag()
         {
             _isDragging = true;
             _dragPosition = transform.position;
             _sortingGroup.sortingOrder = _dragSortingOrder;
         }
-        
+
         public void EndDrag()
         {
             _isDragging = false;
             _sortingGroup.sortingOrder = _normalSortingOrder;
         }
-        
+
         private void Update()
         {
             Vector3 target = _isDragging

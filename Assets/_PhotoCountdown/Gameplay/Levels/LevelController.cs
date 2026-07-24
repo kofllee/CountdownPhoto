@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _PhotoCountdown.Gameplay.Characters;
 using _PhotoCountdown.Gameplay.Characters.Behaviours;
@@ -10,15 +11,27 @@ using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Levels
 {
-    public class LevelController : MonoBehaviour
+    public sealed class LevelController : MonoBehaviour
     {
         [SerializeField] private Transform _levelContentRoot;
         [SerializeField] private CharacterDragInput _dragInput;
         [SerializeField] private LevelClock _clock;
         [SerializeField] private PhotoCaptureController _photoCapture;
+        [SerializeField] private PhotoRankEvaluator _rankEvaluator;
 
-        private void Awake()
+        public bool IsInitialized { get; private set; }
+
+        public void Init(LevelDefinition level, PhotoAlbum album)
         {
+            if (IsInitialized)
+                throw new InvalidOperationException($"{name} is already initialized.");
+
+            if (!level)
+                throw new ArgumentNullException(nameof(level));
+
+            if (album == null)
+                throw new ArgumentNullException(nameof(album));
+
             ValidateReferences();
 
             LevelCharacter[] characters = _levelContentRoot.GetComponentsInChildren<LevelCharacter>(true);
@@ -32,7 +45,8 @@ namespace _PhotoCountdown.Gameplay.Levels
             foreach (LevelCharacter character in characters)
                 InitCharacterPresentation(character);
 
-            CharacterPlacementSystem placement = new CharacterPlacementSystem(characters);
+            CharacterPlacementSystem placement =
+                new CharacterPlacementSystem(characters);
             NeighborResolver neighbors = new NeighborResolver(characters);
 
             _dragInput.Init(placement);
@@ -41,15 +55,23 @@ namespace _PhotoCountdown.Gameplay.Levels
             foreach (LevelCharacter character in characters)
                 InitCharacterBehaviour(character, neighbors);
 
-            _photoCapture.Init(_clock, characters, objectives);
+            _photoCapture.Init(level, album, _clock, characters, objectives, _rankEvaluator);
+
+            IsInitialized = true;
         }
 
-        private void InitCharacterBehaviour(LevelCharacter character, NeighborResolver neighbors)
+        private void InitCharacterBehaviour(
+            LevelCharacter character,
+            NeighborResolver neighbors)
         {
-            CharacterBehaviourController controller = character.GetComponent<CharacterBehaviourController>();
+            CharacterBehaviourController controller =
+                character.GetComponent<CharacterBehaviourController>();
 
             if (!controller)
-                throw new MissingComponentException($"{character.name} needs CharacterBehaviourController.");
+            {
+                throw new MissingComponentException(
+                    $"{character.name} needs CharacterBehaviourController.");
+            }
 
             controller.Init(character, _clock, neighbors);
         }
@@ -77,6 +99,9 @@ namespace _PhotoCountdown.Gameplay.Levels
 
             if (!_photoCapture)
                 throw new MissingReferenceException($"{name} has no photo capture controller.");
+
+            if (!_rankEvaluator)
+                throw new MissingReferenceException($"{name} has no photo rank evaluator.");
         }
 
         private static void ValidateCharacters(LevelCharacter[] characters)
@@ -92,7 +117,9 @@ namespace _PhotoCountdown.Gameplay.Levels
                     throw new MissingReferenceException($"{character.name} has no initial slot.");
 
                 if (!occupiedSlots.Add(character.InitialSlot))
+                {
                     throw new MissingReferenceException($"Several characters use {character.InitialSlot.name}.");
+                }
             }
         }
     }
