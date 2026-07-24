@@ -73,7 +73,16 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
             }
         }
 
-        public CharacterActionDefinition CurrentAction => CurrentPhase?.Action;
+        public CharacterActionDefinition CurrentAction => !_isInitialized ? null : GetActionAt(_clock.Time);
+
+        public CharacterActionDefinition GetActionAt(double levelTime)
+        {
+            if (!_isInitialized || !_character.CurrentBehaviour)
+                return null;
+
+            double elapsedTime = _isDragging ? _frozenElapsedTime : levelTime - _character.BehaviourStartedAt;
+            return _character.CurrentBehaviour.GetActionAt(elapsedTime);
+        }
 
         public CharacterCountdownInfo Countdown
         {
