@@ -26,13 +26,21 @@ namespace _PhotoCountdown.Gameplay.Characters
             CurrentSlot = slot;
         }
         
-        public void SetBehaviour(CharacterBehaviour behaviour, double time)
+        public void SetBehaviour(CharacterBehaviour behaviour, double time, bool restart = false)
         {
-            if (CurrentBehaviour == behaviour)
+            if (!restart && CurrentBehaviour == behaviour)
                 return;
 
             CurrentBehaviour = behaviour;
             BehaviourStartedAt = time;
+        }
+
+        public void RestoreBehaviourTime(double time, double elapsedTime)
+        {
+            if (CurrentBehaviour == null)
+                return;
+
+            BehaviourStartedAt = time - elapsedTime;
         }
     }
 }

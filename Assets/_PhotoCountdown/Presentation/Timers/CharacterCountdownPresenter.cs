@@ -49,6 +49,12 @@ namespace _PhotoCountdown.Presentation.Timers
                 _viewRoot.SetActive(false);
                 return;
             }
+            
+            if (_controller.IsDragging)
+            {
+                _viewRoot.SetActive(false);
+                return;
+            }
 
             CharacterActionDefinition action = _controller.CurrentAction;
 

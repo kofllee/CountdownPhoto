@@ -1,6 +1,7 @@
 using _PhotoCountdown.Gameplay.Characters.Actions;
 using _PhotoCountdown.Gameplay.Levels;
 using _PhotoCountdown.Gameplay.Neighbors;
+using _PhotoCountdown.Gameplay.Slots;
 using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Characters.Behaviours
@@ -12,9 +13,13 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
         private NeighborResolver _neighbors;
         private CharacterBehaviour[] _behaviours;
         private CharacterBehaviourResolver _resolver;
+        private CharacterSlot _resolvedSlot;
+        private bool _isDragging;
+        private double _frozenElapsedTime;
         private bool _isInitialized;
 
         public CharacterBehaviour CurrentBehaviour => _isInitialized ? _character.CurrentBehaviour : null;
+        public bool IsDragging => _isDragging;
 
         public double BehaviourElapsedTime
         {
@@ -22,6 +27,9 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
             {
                 if (!_isInitialized || !_character.CurrentBehaviour)
                     return 0d;
+
+                if (_isDragging)
+                    return _frozenElapsedTime;
 
                 return _clock.Time - _character.BehaviourStartedAt;
             }
@@ -49,7 +57,7 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
             {
                 CharacterBehaviour behaviour = CurrentBehaviour;
 
-                if (behaviour == null)
+                if (!behaviour)
                     return 0d;
 
                 return behaviour.GetPhaseRemainingTime(BehaviourElapsedTime);
@@ -61,7 +69,7 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
             get
             {
                 CharacterBehaviourPhase phase = CurrentPhase;
-                return phase == null ? 0f : phase.Duration;
+                return phase?.Duration ?? 0f;
             }
         }
 
@@ -91,6 +99,7 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
             _clock = clock;
             _neighbors = neighbors;
             _resolver = new CharacterBehaviourResolver();
+            _resolvedSlot = character.CurrentSlot;
 
             _behaviours = GetComponentsInChildren<CharacterBehaviour>(true);
 
@@ -106,25 +115,52 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
 
         private void Update()
         {
-            if (!_isInitialized)
+            if (!_isInitialized || _isDragging)
                 return;
 
-            ResolveBehaviour();
+            bool slotChanged = _resolvedSlot != _character.CurrentSlot;
+
+            if (slotChanged)
+                _resolvedSlot = _character.CurrentSlot;
+
+            ResolveBehaviour(slotChanged);
         }
         
-        private void ResolveBehaviour()
+        public void BeginDrag()
+        {
+            if (!_isInitialized || _isDragging)
+                return;
+
+            _frozenElapsedTime = BehaviourElapsedTime;
+            _isDragging = true;
+        }
+
+        public void EndDrag()
+        {
+            if (!_isDragging)
+                return;
+
+            _isDragging = false;
+
+            if (_resolvedSlot == _character.CurrentSlot)
+            {
+                _character.RestoreBehaviourTime(_clock.Time, _frozenElapsedTime);
+                return;
+            }
+
+            _resolvedSlot = _character.CurrentSlot;
+            ResolveBehaviour(true);
+        }
+        
+        private void ResolveBehaviour(bool restart = false)
         {
             CharacterBehaviourContext context = new CharacterBehaviourContext(_character, _neighbors);
-
             CharacterBehaviour behaviour = _resolver.Resolve(_behaviours, context);
 
             if (!behaviour)
-            {
                 throw new MissingReferenceException($"{name} has no matching character behaviour.");
-            }
 
-            _character.SetBehaviour(behaviour, _clock.Time);
+            _character.SetBehaviour(behaviour, _clock.Time, restart);
         }
-
     }
 }
