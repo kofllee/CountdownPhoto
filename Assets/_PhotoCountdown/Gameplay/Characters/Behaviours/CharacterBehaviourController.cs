@@ -14,13 +14,13 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
         private CharacterBehaviourResolver _resolver;
         private bool _isInitialized;
 
-        public CharacterBehaviour CurrentBehaviour => _character.CurrentBehaviour;
+        public CharacterBehaviour CurrentBehaviour => _isInitialized ? _character.CurrentBehaviour : null;
 
         public double BehaviourElapsedTime
         {
             get
             {
-                if (_character.CurrentBehaviour == null)
+                if (!_isInitialized || !_character.CurrentBehaviour)
                     return 0d;
 
                 return _clock.Time - _character.BehaviourStartedAt;
@@ -31,22 +31,23 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
         {
             get
             {
+                if (!_isInitialized)
+                    return null;
+
                 CharacterBehaviour behaviour = _character.CurrentBehaviour;
 
-                if (behaviour == null)
+                if (!behaviour)
                     return null;
 
                 return behaviour.GetPhaseAt(BehaviourElapsedTime);
             }
         }
-
-        public CharacterActionDefinition CurrentAction => CurrentPhase?.Action;
-
+        
         public double CurrentPhaseRemainingTime
         {
             get
             {
-                CharacterBehaviour behaviour = _character.CurrentBehaviour;
+                CharacterBehaviour behaviour = CurrentBehaviour;
 
                 if (behaviour == null)
                     return 0d;
@@ -54,6 +55,35 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
                 return behaviour.GetPhaseRemainingTime(BehaviourElapsedTime);
             }
         }
+
+        public float CurrentPhaseDuration
+        {
+            get
+            {
+                CharacterBehaviourPhase phase = CurrentPhase;
+                return phase == null ? 0f : phase.Duration;
+            }
+        }
+
+        public CharacterActionDefinition CurrentAction => CurrentPhase?.Action;
+
+        public CharacterCountdownInfo Countdown
+        {
+            get
+            {
+                if (!_isInitialized)
+                    return CharacterCountdownInfo.Hidden;
+
+                CharacterBehaviour behaviour = _character.CurrentBehaviour;
+
+                if (!behaviour)
+                    return CharacterCountdownInfo.Hidden;
+
+                return behaviour.GetCountdownAt(BehaviourElapsedTime);
+            }
+        }
+        
+        public bool IsInitialized => _isInitialized;
 
         public void Init(LevelCharacter character, LevelClock clock, NeighborResolver neighbors)
         {

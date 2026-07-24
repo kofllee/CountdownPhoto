@@ -6,13 +6,13 @@ namespace _PhotoCountdown.Gameplay.Characters.Actions
     public class CharacterActionDefinition : ScriptableObject
     {
         [SerializeField] private string _displayName;
-        [SerializeField] private CharacterActionType _type;
         [SerializeField] private AnimationClip _animation;
+        [SerializeField] private Sprite _icon;
         [SerializeField] private Color _debugColor = Color.white;
         
         public string DisplayName => _displayName;
-        public CharacterActionType Type => _type;
         public AnimationClip Animation => _animation;
+        public Sprite Icon => _icon;
         public Color DebugColor => _debugColor;
 
     }

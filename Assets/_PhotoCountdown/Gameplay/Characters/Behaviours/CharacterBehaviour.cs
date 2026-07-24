@@ -96,5 +96,57 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
 
             return duration;
         }
+        
+        public CharacterCountdownInfo GetCountdownAt(double elapsedTime)
+        {
+            double cycleDuration = GetCycleDuration();
+
+            if (cycleDuration <= 0d || _phases.Count == 0)
+                return CharacterCountdownInfo.Hidden;
+
+            double cycleTime = elapsedTime % cycleDuration;
+            int currentIndex = GetPhaseIndexAt(cycleTime, out double timeIntoPhase);
+
+            CharacterBehaviourPhase currentPhase = _phases[currentIndex];
+            double remainingTime = currentPhase.Duration - timeIntoPhase;
+            double totalTime = currentPhase.Duration;
+
+            for (int offset = 1; offset <= _phases.Count; offset++)
+            {
+                int index = (currentIndex + offset) % _phases.Count;
+                CharacterBehaviourPhase phase = _phases[index];
+
+                if (phase.Action && phase.CountdownType != CharacterCountdownType.Hidden)
+                {
+                    return new CharacterCountdownInfo(phase.Action, phase.CountdownType, remainingTime, totalTime);
+                }
+
+                remainingTime += phase.Duration;
+                totalTime += phase.Duration;
+            }
+
+            return CharacterCountdownInfo.Hidden;
+        }
+
+        private int GetPhaseIndexAt(double cycleTime, out double timeIntoPhase)
+        {
+            double phaseStart = 0d;
+
+            for (int i = 0; i < _phases.Count; i++)
+            {
+                double phaseEnd = phaseStart + _phases[i].Duration;
+
+                if (cycleTime < phaseEnd)
+                {
+                    timeIntoPhase = cycleTime - phaseStart;
+                    return i;
+                }
+
+                phaseStart = phaseEnd;
+            }
+
+            timeIntoPhase = 0d;
+            return _phases.Count - 1;
+        }
     }
 }
