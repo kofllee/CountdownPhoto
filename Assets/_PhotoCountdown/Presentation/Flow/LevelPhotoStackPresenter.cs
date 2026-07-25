@@ -25,11 +25,20 @@ namespace _PhotoCountdown.Presentation.Flow
         [SerializeField] private PhotoView _middlePhoto;
         [SerializeField] private PhotoView _backPhoto;
 
+        private readonly List<PhotoResult> _photos = new();
         private readonly List<Texture2D> _createdTextures = new();
         private readonly List<Sprite> _createdSprites = new();
 
-        public void Show(IEnumerable<PhotoResult> photos, PhotoAlbumStorage storage)
+        private PhotoAlbumStorage _storage;
+        private Action<IReadOnlyList<PhotoResult>, PhotoAlbumStorage> _galleryRequested;
+        private bool _isInitialized;
+
+        public void Show(IEnumerable<PhotoResult> photos, PhotoAlbumStorage storage,
+            Action<IReadOnlyList<PhotoResult>, PhotoAlbumStorage> galleryRequested)
         {
+            if (_isInitialized)
+                throw new InvalidOperationException($"{name} is already initialized.");
+
             if (photos == null)
                 throw new ArgumentNullException(nameof(photos));
 
@@ -39,13 +48,24 @@ namespace _PhotoCountdown.Presentation.Flow
             ValidateReferences();
             ClearPhotos();
 
-            List<PhotoResult> sortedPhotos = new List<PhotoResult>(photos);
-            sortedPhotos.Sort(CompareNewestFirst);
+            _storage = storage;
+            _galleryRequested = galleryRequested ??
+                                throw new ArgumentNullException(nameof(galleryRequested));
+
+            _photos.Clear();
+
+            foreach (PhotoResult photo in photos)
+            {
+                if (photo != null)
+                    _photos.Add(photo);
+            }
+
+            _photos.Sort(CompareNewestFirst);
 
             PhotoView[] views = { _frontPhoto, _middlePhoto, _backPhoto };
             int shownCount = 0;
 
-            foreach (PhotoResult photo in sortedPhotos)
+            foreach (PhotoResult photo in _photos)
             {
                 if (shownCount >= views.Length)
                     break;
@@ -58,6 +78,16 @@ namespace _PhotoCountdown.Presentation.Flow
             }
 
             UpdateContainer(shownCount);
+            _photosButton.onClick.AddListener(OpenGallery);
+            _isInitialized = true;
+        }
+
+        private void OpenGallery()
+        {
+            if (_photos.Count == 0)
+                return;
+
+            _galleryRequested.Invoke(_photos, _storage);
         }
 
         private void UpdateContainer(int photoCount)
@@ -80,7 +110,8 @@ namespace _PhotoCountdown.Presentation.Flow
             };
         }
 
-        private bool TryCreateSprite(PhotoResult photo, PhotoAlbumStorage storage, out Sprite sprite)
+        private bool TryCreateSprite(PhotoResult photo, PhotoAlbumStorage storage,
+            out Sprite sprite)
         {
             sprite = null;
             Texture2D texture = null;
@@ -98,11 +129,10 @@ namespace _PhotoCountdown.Presentation.Flow
                 }
 
                 texture.name = $"Photo_{photo.Id}";
-                sprite = Sprite.Create(
-                    texture,
+
+                sprite = Sprite.Create(texture,
                     new Rect(0f, 0f, texture.width, texture.height),
-                    new Vector2(0.5f, 0.5f),
-                    100f);
+                    new Vector2(0.5f, 0.5f), 100f);
 
                 sprite.name = $"PhotoSprite_{photo.Id}";
 
@@ -143,6 +173,9 @@ namespace _PhotoCountdown.Presentation.Flow
 
         private void OnDestroy()
         {
+            if (_photosButton != null)
+                _photosButton.onClick.RemoveListener(OpenGallery);
+
             ClearPhotos();
         }
 

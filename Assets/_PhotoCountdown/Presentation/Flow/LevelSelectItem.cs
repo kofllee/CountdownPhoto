@@ -27,12 +27,10 @@ namespace _PhotoCountdown.Presentation.Flow
 
         public LevelDefinition Level => _level;
 
-        public void Init(
-            LevelRank rank,
-            bool unlocked,
-            IEnumerable<PhotoResult> photos,
-            PhotoAlbumStorage photoStorage,
-            Action<LevelDefinition> selected)
+        public void Init(LevelRank rank, bool unlocked, IEnumerable<PhotoResult> photos,
+            PhotoAlbumStorage photoStorage, Action<LevelDefinition> selected,
+            Action<LevelDefinition, IReadOnlyList<PhotoResult>,
+                PhotoAlbumStorage> galleryRequested)
         {
             if (_isInitialized)
                 throw new InvalidOperationException($"{name} is already initialized.");
@@ -41,11 +39,16 @@ namespace _PhotoCountdown.Presentation.Flow
 
             _selected = selected ?? throw new ArgumentNullException(nameof(selected));
 
+            if (galleryRequested == null)
+                throw new ArgumentNullException(nameof(galleryRequested));
+
             _button.interactable = unlocked;
             _lockedView.SetActive(!unlocked);
 
             UpdateStars(rank);
-            _photoStack.Show(photos, photoStorage);
+
+            _photoStack.Show(photos, photoStorage,
+                (photoList, storage) => galleryRequested(_level, photoList, storage));
 
             _button.onClick.AddListener(SelectLevel);
             _isInitialized = true;

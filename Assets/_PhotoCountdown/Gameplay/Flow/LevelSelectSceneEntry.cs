@@ -14,6 +14,7 @@ namespace _PhotoCountdown.Gameplay.Flow
         [SerializeField] private Transform _itemsRoot;
         [SerializeField] private Button _backButton;
         [SerializeField] private UISlideInFromBottom _boardAnimation;
+        [SerializeField] private LevelPhotoGalleryPresenter _photoGallery;
 
         private GameFlowController _flow;
 
@@ -23,6 +24,7 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             _flow = flow;
             _backButton.onClick.AddListener(OpenMainMenu);
+            _photoGallery.Init();
 
             LevelSelectItem[] items = _itemsRoot.GetComponentsInChildren<LevelSelectItem>(true);
             ValidateItems(session, items);
@@ -33,7 +35,7 @@ namespace _PhotoCountdown.Gameplay.Flow
                 bool unlocked = session.IsLevelUnlocked(item.Level);
                 IEnumerable<PhotoResult> photos = session.Album.GetLevelPhotos(item.Level.Id);
 
-                item.Init(rank, unlocked, photos, session.PhotoStorage, OpenLevel);
+                item.Init(rank, unlocked, photos, session.PhotoStorage, OpenLevel, OpenGallery);
             }
 
             _boardAnimation.PlayIn();
@@ -41,7 +43,9 @@ namespace _PhotoCountdown.Gameplay.Flow
 
         protected override IEnumerator OnExit()
         {
+            _photoGallery.CloseImmediately();
             _backButton.interactable = false;
+
             yield return _boardAnimation.PlayOut();
         }
 
@@ -54,6 +58,12 @@ namespace _PhotoCountdown.Gameplay.Flow
         private void OpenLevel(LevelDefinition level)
         {
             _flow.OpenLevel(level);
+        }
+
+        private void OpenGallery(LevelDefinition level, IReadOnlyList<PhotoResult> photos,
+            PhotoAlbumStorage storage)
+        {
+            _photoGallery.Open(level, photos, storage);
         }
 
         private void OpenMainMenu()
@@ -71,6 +81,9 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             if (!_boardAnimation)
                 throw new MissingReferenceException($"{name} has no board animation.");
+
+            if (!_photoGallery)
+                throw new MissingReferenceException($"{name} has no photo gallery.");
         }
 
         private static void ValidateItems(GameSession session, LevelSelectItem[] items)

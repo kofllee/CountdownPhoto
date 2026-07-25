@@ -40,6 +40,7 @@ namespace _PhotoCountdown.Presentation.UI
         private bool isHovered;
         private bool isSelected;
         private bool isPressed;
+        private bool lastInteractable;
 
         private void Awake()
         {
@@ -48,9 +49,10 @@ namespace _PhotoCountdown.Presentation.UI
             defaultScale = scaleTarget.localScale;
             targetScale = defaultScale;
             targetColor = normalColor;
+            lastInteractable = button.interactable;
 
             button.transition = Selectable.Transition.None;
-            colorTarget.color = normalColor;
+            colorTarget.color = button.interactable ? normalColor : disabledColor;
             outline.SetColor(normalOutlineColor);
             outline.Hide();
         }
@@ -62,6 +64,7 @@ namespace _PhotoCountdown.Presentation.UI
             defaultScale = scaleTarget.localScale;
             targetScale = defaultScale;
             targetColor = button.interactable ? normalColor : disabledColor;
+            lastInteractable = button.interactable;
 
             isHovered = false;
             isSelected = false;
@@ -71,6 +74,7 @@ namespace _PhotoCountdown.Presentation.UI
             scaleTarget.localScale = defaultScale;
             colorTarget.color = targetColor;
             outline.SetColor(normalOutlineColor);
+
             UpdateVisualState();
         }
 
@@ -95,17 +99,31 @@ namespace _PhotoCountdown.Presentation.UI
 
         private void Update()
         {
-            if (!button.interactable && (isHovered || isPressed))
+            bool interactable = button.interactable;
+
+            if (interactable != lastInteractable)
             {
-                isHovered = false;
-                isPressed = false;
+                lastInteractable = interactable;
+
+                if (!interactable)
+                {
+                    isHovered = false;
+                    isSelected = false;
+                    isPressed = false;
+                }
+
                 UpdateVisualState();
+
+                scaleTarget.localScale = targetScale;
+                colorTarget.color = targetColor;
             }
 
             float scaleFactor = 1f - Mathf.Exp(-scaleSpeed * Time.unscaledDeltaTime);
             float colorFactor = 1f - Mathf.Exp(-colorSpeed * Time.unscaledDeltaTime);
 
-            scaleTarget.localScale = Vector3.Lerp(scaleTarget.localScale, targetScale, scaleFactor);
+            scaleTarget.localScale =
+                Vector3.Lerp(scaleTarget.localScale, targetScale, scaleFactor);
+
             colorTarget.color = Color.Lerp(colorTarget.color, targetColor, colorFactor);
         }
 
@@ -123,13 +141,17 @@ namespace _PhotoCountdown.Presentation.UI
             isHovered = false;
             isPressed = false;
             isSelected = false;
+
             UpdateVisualState();
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!button.interactable || eventData.button != PointerEventData.InputButton.Left)
+            if (!button.interactable ||
+                eventData.button != PointerEventData.InputButton.Left)
+            {
                 return;
+            }
 
             isPressed = true;
             UpdateVisualState();
@@ -157,6 +179,7 @@ namespace _PhotoCountdown.Presentation.UI
         {
             isSelected = false;
             isPressed = false;
+
             UpdateVisualState();
         }
 
@@ -181,8 +204,10 @@ namespace _PhotoCountdown.Presentation.UI
                 throw new MissingReferenceException($"{name} has no color target.");
 
             if (outline == null)
+            {
                 throw new MissingReferenceException(
                     $"{name} has no {nameof(DashedUIImageOutline)}.");
+            }
         }
 
         private DashedUIImageOutline FindOutline()
@@ -194,7 +219,8 @@ namespace _PhotoCountdown.Presentation.UI
 
             if (button != null && button.targetGraphic != null)
             {
-                foundOutline = button.targetGraphic.GetComponent<DashedUIImageOutline>();
+                foundOutline =
+                    button.targetGraphic.GetComponent<DashedUIImageOutline>();
 
                 if (foundOutline != null)
                     return foundOutline;
