@@ -28,7 +28,7 @@ namespace _PhotoCountdown.Gameplay.Photography
         private bool _isInitialized;
         private bool _isCapturing;
 
-        public event Action<PhotoResult> PhotoCaptured;
+        public event Action<PhotoResult, IReadOnlyList<string>> PhotoCaptured;
 
         public PhotoResult LastPhoto { get; private set; }
 
@@ -161,74 +161,80 @@ namespace _PhotoCountdown.Gameplay.Photography
         }
 
         private IEnumerator CaptureRoutine()
-        {
-            _isCapturing = true;
-            _dragInput.enabled = false;
+{
+    _isCapturing = true;
+    _dragInput.enabled = false;
 
-            double photoTime = _clock.Time;
-            _clock.PauseClock();
+    bool resultShown = false;
+    double photoTime = _clock.Time;
+    _clock.PauseClock();
 
-            try
-            {
-                CharacterPhotoState[] characters = CaptureCharacters(photoTime);
-                PhotoEvaluationContext context =
-                    new PhotoEvaluationContext(photoTime, characters);
-                PhotoEvaluation evaluation = new PhotoEvaluation(_objectives, context);
-                LevelRank rank = _rankEvaluator.Evaluate(evaluation);
-                PhotoObjective[] failed =
-                    _rankEvaluator.GetRelevantFailedRequirements(evaluation, rank);
+    try
+    {
+        CharacterPhotoState[] characters = CaptureCharacters(photoTime);
+        PhotoEvaluationContext context = new PhotoEvaluationContext(
+            photoTime,
+            characters);
 
-                yield return null;
+        PhotoEvaluation evaluation = new PhotoEvaluation(_objectives, context);
+        LevelRank rank = _rankEvaluator.Evaluate(evaluation);
+        string[] visibleFailures =
+            _rankEvaluator.GetVisibleFailureDescriptions(evaluation, rank);
 
-                CapturedPhotoImage capturedImage = null;
-                yield return _imageCapture.Capture(image => capturedImage = image);
+        yield return null;
 
-                if (capturedImage == null)
-                    throw new InvalidOperationException("Photo camera returned no image.");
+        CapturedPhotoImage capturedImage = null;
+        yield return _imageCapture.Capture(image => capturedImage = image);
 
-                PhotoIssueRegion[] issueRegions = CaptureIssueRegions(failed);
-                PhotoObjectiveResult[] objectiveResults = evaluation.CreateResults();
+        if (capturedImage == null)
+            throw new InvalidOperationException("Photo camera returned no image.");
 
-                string photoId = Guid.NewGuid().ToString("N");
-                string fileName = photoId + ".png";
+        PhotoObjectiveResult[] objectiveResults = evaluation.CreateResults();
+        string photoId = Guid.NewGuid().ToString("N");
+        string fileName = photoId + ".png";
 
-                PhotoImageReference image = new PhotoImageReference(
-                    fileName,
-                    capturedImage.Width,
-                    capturedImage.Height);
+        PhotoImageReference image = new PhotoImageReference(
+            fileName,
+            capturedImage.Width,
+            capturedImage.Height);
 
-                PhotoSnapshot snapshot = new PhotoSnapshot(
-                    photoTime,
-                    objectiveResults,
-                    issueRegions);
+        PhotoSnapshot snapshot = new PhotoSnapshot(
+            photoTime,
+            objectiveResults,
+            Array.Empty<PhotoIssueRegion>());
 
-                PhotoResult photo = new PhotoResult(
-                    photoId,
-                    _level.Id,
-                    DateTime.UtcNow.Ticks,
-                    snapshot,
-                    image,
-                    rank);
+        PhotoResult photo = new PhotoResult(
+            photoId,
+            _level.Id,
+            DateTime.UtcNow.Ticks,
+            snapshot,
+            image,
+            rank);
 
-                _storage.SaveNewPhoto(_album, photo, capturedImage.PngData);
+        _storage.SaveNewPhoto(_album, photo, capturedImage.PngData);
 
-                LastPhoto = photo;
-                PhotoCaptured?.Invoke(photo);
+        LastPhoto = photo;
+        PhotoCaptured?.Invoke(photo, visibleFailures);
+        resultShown = true;
 
 #if UNITY_EDITOR
-                Debug.Log(
-                    $"Saved photo #{_album.GetLevelPhotoCount(_level.Id)}: " +
-                    $"{_level.Id}, {rank}.",
-                    this);
+        Debug.Log(
+            $"Saved photo #{_album.GetLevelPhotoCount(_level.Id)}: " +
+            $"{_level.Id}, {rank}.",
+            this);
 #endif
-            }
-            finally
-            {
-                _clock.ResumeClock();
-                _dragInput.enabled = true;
-                _isCapturing = false;
-            }
+    }
+    finally
+    {
+        if (!resultShown)
+        {
+            _clock.ResumeClock();
+            _dragInput.enabled = true;
         }
+
+        _isCapturing = false;
+    }
+}
 
         private CharacterPhotoState[] CaptureCharacters(double photoTime)
         {
@@ -247,26 +253,6 @@ namespace _PhotoCountdown.Gameplay.Photography
             }
 
             return states;
-        }
-
-        private PhotoIssueRegion[] CaptureIssueRegions(PhotoObjective[] failedObjectives)
-        {
-            HashSet<PhotoHighlightTarget> targets = new HashSet<PhotoHighlightTarget>();
-            List<PhotoIssueRegion> regions = new List<PhotoIssueRegion>();
-
-            foreach (PhotoObjective objective in failedObjectives)
-            {
-                foreach (PhotoHighlightTarget target in objective.IssueTargets)
-                    targets.Add(target);
-            }
-
-            foreach (PhotoHighlightTarget target in targets)
-            {
-                if (target.TryGetViewportRect(_imageCapture.PhotoCamera, out Rect rect))
-                    regions.Add(new PhotoIssueRegion(rect));
-            }
-
-            return regions.ToArray();
         }
     }
 }

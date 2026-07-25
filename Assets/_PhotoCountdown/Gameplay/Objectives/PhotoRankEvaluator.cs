@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Objectives
 {
-    public class PhotoRankEvaluator : MonoBehaviour
+    public sealed class PhotoRankEvaluator : MonoBehaviour
     {
         [SerializeField] private PhotoObjective[] _oneStarRequirements;
         [SerializeField] private PhotoObjective[] _twoStarRequirements;
@@ -15,34 +15,36 @@ namespace _PhotoCountdown.Gameplay.Objectives
             if (evaluation == null)
                 throw new ArgumentNullException(nameof(evaluation));
 
-            if (Matches(_twoStarRequirements, evaluation))
+            bool completedOneStar = Matches(_oneStarRequirements, evaluation);
+
+            if (completedOneStar && Matches(_twoStarRequirements, evaluation))
                 return LevelRank.TwoStars;
 
-            if (Matches(_oneStarRequirements, evaluation))
+            if (completedOneStar)
                 return LevelRank.OneStar;
 
             return LevelRank.Failed;
         }
 
-        public PhotoObjective[] GetRelevantFailedRequirements(PhotoEvaluation evaluation, LevelRank rank)
+        public string[] GetVisibleFailureDescriptions(
+            PhotoEvaluation evaluation,
+            LevelRank rank)
         {
             if (evaluation == null)
                 throw new ArgumentNullException(nameof(evaluation));
 
-            if (rank == LevelRank.TwoStars)
-                return Array.Empty<PhotoObjective>();
+            if (rank != LevelRank.Failed)
+                return Array.Empty<string>();
 
-            PhotoObjective[] requirements = rank == LevelRank.OneStar ? _twoStarRequirements : _oneStarRequirements;
+            List<string> failures = new List<string>();
 
-            List<PhotoObjective> failed = new List<PhotoObjective>();
-
-            foreach (PhotoObjective objective in requirements)
+            foreach (PhotoObjective objective in _oneStarRequirements)
             {
                 if (!evaluation.IsCompleted(objective))
-                    failed.Add(objective);
+                    failures.Add(objective.Description);
             }
 
-            return failed.ToArray();
+            return failures.ToArray();
         }
 
         public void Validate(IReadOnlyList<PhotoObjective> availableObjectives)
@@ -50,13 +52,16 @@ namespace _PhotoCountdown.Gameplay.Objectives
             if (availableObjectives == null)
                 throw new ArgumentNullException(nameof(availableObjectives));
 
-            HashSet<PhotoObjective> available = new HashSet<PhotoObjective>(availableObjectives);
+            HashSet<PhotoObjective> available = new HashSet<PhotoObjective>(
+                availableObjectives);
 
             ValidateRequirements(_oneStarRequirements, "one-star", available);
             ValidateRequirements(_twoStarRequirements, "two-star", available);
         }
 
-        private static bool Matches(PhotoObjective[] requirements, PhotoEvaluation evaluation)
+        private static bool Matches(
+            PhotoObjective[] requirements,
+            PhotoEvaluation evaluation)
         {
             foreach (PhotoObjective objective in requirements)
             {
@@ -67,7 +72,10 @@ namespace _PhotoCountdown.Gameplay.Objectives
             return true;
         }
 
-        private void ValidateRequirements(PhotoObjective[] requirements, string rankName, HashSet<PhotoObjective> available)
+        private void ValidateRequirements(
+            PhotoObjective[] requirements,
+            string rankName,
+            HashSet<PhotoObjective> available)
         {
             if (requirements == null || requirements.Length == 0)
                 throw new MissingReferenceException($"{name} has no {rankName} requirements.");
@@ -76,19 +84,22 @@ namespace _PhotoCountdown.Gameplay.Objectives
 
             foreach (PhotoObjective objective in requirements)
             {
-                if (objective == null)
+                if (!objective)
                 {
-                    throw new MissingReferenceException($"{name} contains a missing {rankName} requirement.");
+                    throw new MissingReferenceException(
+                        $"{name} contains a missing {rankName} requirement.");
                 }
 
                 if (!available.Contains(objective))
                 {
-                    throw new MissingReferenceException($"{objective.name} is outside the level objective collection.");
+                    throw new MissingReferenceException(
+                        $"{objective.name} is outside the level objective collection.");
                 }
 
                 if (!unique.Add(objective))
                 {
-                    throw new MissingReferenceException($"{name} contains duplicate requirement {objective.name}.");
+                    throw new MissingReferenceException(
+                        $"{name} contains duplicate requirement {objective.name}.");
                 }
             }
         }

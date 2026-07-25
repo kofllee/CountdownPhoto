@@ -1,5 +1,6 @@
 using System;
 using _PhotoCountdown.Gameplay.Levels;
+using _PhotoCountdown.Presentation.Flow;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ namespace _PhotoCountdown.Gameplay.Flow
     {
         [SerializeField] private LevelDefinition _level;
         [SerializeField] private LevelController _levelController;
+        [SerializeField] private PhotoResultPresenter _resultPresenter;
         [SerializeField] private Button _backButton;
 
         private GameFlowController _flow;
@@ -24,7 +26,17 @@ namespace _PhotoCountdown.Gameplay.Flow
             }
 
             _flow = flow;
+
             _levelController.Init(_level, session.Album, session.PhotoStorage);
+
+            _resultPresenter.Init(
+                _level,
+                _levelController.PhotoCapture,
+                session.PhotoStorage,
+                flow.OpenLevelSelect,
+                flow.ReloadCurrentLevel,
+                flow.OpenNextLevel);
+
             _backButton.onClick.AddListener(OpenLevelSelect);
         }
 
@@ -46,6 +58,9 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             if (!_levelController)
                 throw new MissingReferenceException($"{name} has no level controller.");
+
+            if (!_resultPresenter)
+                throw new MissingReferenceException($"{name} has no result presenter.");
 
             if (!_backButton)
                 throw new MissingReferenceException($"{name} has no back button.");

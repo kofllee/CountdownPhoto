@@ -19,8 +19,9 @@ namespace _PhotoCountdown.Gameplay.Levels
         [SerializeField] private PhotoCaptureController _photoCapture;
         [SerializeField] private PhotoRankEvaluator _rankEvaluator;
 
+        public PhotoCaptureController PhotoCapture => _photoCapture;
         public bool IsInitialized { get; private set; }
-
+        
         public void Init(LevelDefinition level, PhotoAlbum album, PhotoAlbumStorage storage)
         {
             if (IsInitialized)
