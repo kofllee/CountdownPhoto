@@ -7,8 +7,7 @@ namespace _PhotoCountdown.Gameplay.Photography
     public class PhotoAlbum
     {
         private readonly List<PhotoResult> _photos = new();
-
-        public event Action<PhotoResult> PhotoAdded;
+        private readonly HashSet<string> _photoIds = new();
 
         public IReadOnlyList<PhotoResult> Photos => _photos;
 
@@ -17,8 +16,15 @@ namespace _PhotoCountdown.Gameplay.Photography
             if (photo == null)
                 throw new ArgumentNullException(nameof(photo));
 
+            if (!_photoIds.Add(photo.Id))
+                throw new InvalidOperationException($"Photo {photo.Id} already exists.");
+
             _photos.Add(photo);
-            PhotoAdded?.Invoke(photo);
+        }
+
+        public bool Contains(string photoId)
+        {
+            return _photoIds.Contains(photoId);
         }
 
         public IEnumerable<PhotoResult> GetLevelPhotos(string levelId)

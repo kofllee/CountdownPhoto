@@ -21,8 +21,12 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             _levelCatalog.Validate();
 
-            PhotoAlbum album = new PhotoAlbum();
-            GameSession session = new GameSession(_levelCatalog, album);
+            PhotoAlbumStorage storage =
+                new PhotoAlbumStorage(Application.persistentDataPath);
+            PhotoAlbum album = storage.Load();
+            GameSession session = new GameSession(_levelCatalog, album, storage);
+
+            Debug.Log($"Loaded {album.Photos.Count} saved photos.");
 
             _flow.Init(session);
             _flow.OpenMainMenu();

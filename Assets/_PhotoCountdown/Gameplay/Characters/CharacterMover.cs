@@ -14,6 +14,18 @@ namespace _PhotoCountdown.Gameplay.Characters
         private int _normalSortingOrder;
         private bool _isDragging;
         private Vector3 _dragPosition;
+        
+        public bool IsSettled
+        {
+            get
+            {
+                if (_character == null || _isDragging)
+                    return false;
+
+                Vector3 target = _character.CurrentSlot.transform.position;
+                return (transform.position - target).sqrMagnitude <= 0.0001f;
+            }
+        }
 
         private void Awake()
         {

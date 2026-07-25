@@ -4,15 +4,20 @@ using _PhotoCountdown.Gameplay.Photography;
 
 namespace _PhotoCountdown.Gameplay.Flow
 {
-    public class GameSession
+    public sealed class GameSession
     {
         public LevelCatalog Levels { get; }
         public PhotoAlbum Album { get; }
+        public PhotoAlbumStorage PhotoStorage { get; }
 
-        public GameSession(LevelCatalog levels, PhotoAlbum album)
+        public GameSession(
+            LevelCatalog levels,
+            PhotoAlbum album,
+            PhotoAlbumStorage photoStorage)
         {
             Levels = levels ?? throw new ArgumentNullException(nameof(levels));
             Album = album ?? throw new ArgumentNullException(nameof(album));
+            PhotoStorage = photoStorage ?? throw new ArgumentNullException(nameof(photoStorage));
         }
 
         public LevelRank GetBestRank(LevelDefinition level)
@@ -39,7 +44,7 @@ namespace _PhotoCountdown.Gameplay.Flow
 
         private static void ValidateLevel(LevelDefinition level)
         {
-            if (level == null)
+            if (!level)
                 throw new ArgumentNullException(nameof(level));
         }
     }

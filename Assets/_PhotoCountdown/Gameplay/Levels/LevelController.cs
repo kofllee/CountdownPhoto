@@ -21,10 +21,13 @@ namespace _PhotoCountdown.Gameplay.Levels
 
         public bool IsInitialized { get; private set; }
 
-        public void Init(LevelDefinition level, PhotoAlbum album)
+        public void Init(LevelDefinition level, PhotoAlbum album, PhotoAlbumStorage storage)
         {
             if (IsInitialized)
                 throw new InvalidOperationException($"{name} is already initialized.");
+            
+            if (storage == null)
+                throw new ArgumentNullException(nameof(storage));
 
             if (!level)
                 throw new ArgumentNullException(nameof(level));
@@ -55,7 +58,15 @@ namespace _PhotoCountdown.Gameplay.Levels
             foreach (LevelCharacter character in characters)
                 InitCharacterBehaviour(character, neighbors);
 
-            _photoCapture.Init(level, album, _clock, characters, objectives, _rankEvaluator);
+            _photoCapture.Init(
+                level,
+                album,
+                storage,
+                _clock,
+                _dragInput,
+                characters,
+                objectives,
+                _rankEvaluator);
 
             IsInitialized = true;
         }

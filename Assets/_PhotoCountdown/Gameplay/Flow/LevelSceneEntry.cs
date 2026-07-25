@@ -24,7 +24,7 @@ namespace _PhotoCountdown.Gameplay.Flow
             }
 
             _flow = flow;
-            _levelController.Init(_level, session.Album);
+            _levelController.Init(_level, session.Album, session.PhotoStorage);
             _backButton.onClick.AddListener(OpenLevelSelect);
         }
 
