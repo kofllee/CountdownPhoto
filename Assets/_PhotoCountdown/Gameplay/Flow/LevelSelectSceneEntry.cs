@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _PhotoCountdown.Gameplay.Levels;
+using _PhotoCountdown.Gameplay.Photography;
 using _PhotoCountdown.Presentation.Flow;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,9 @@ namespace _PhotoCountdown.Gameplay.Flow
             {
                 LevelRank rank = session.GetBestRank(item.Level);
                 bool unlocked = session.IsLevelUnlocked(item.Level);
-                item.Init(rank, unlocked, OpenLevel);
+                IEnumerable<PhotoResult> photos = session.Album.GetLevelPhotos(item.Level.Id);
+
+                item.Init(rank, unlocked, photos, session.PhotoStorage, OpenLevel);
             }
         }
 

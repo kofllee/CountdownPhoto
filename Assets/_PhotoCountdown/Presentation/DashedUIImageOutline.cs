@@ -38,6 +38,8 @@ namespace PhotoCountdown.Presentation.UI
 
         [Header("Line Corners")]
         [SerializeField, Range(1f, 8f)] private float lineCornerLimit = 2.5f;
+        [SerializeField] private bool roundLineCorners = true;
+        [SerializeField, Range(4, 24)] private int cornerSegments = 12;
 
         [Header("Animation")]
         [SerializeField] private bool animate;
@@ -639,28 +641,15 @@ namespace PhotoCountdown.Presentation.UI
 
         private void BuildRibbon(IReadOnlyList<Vector2> points)
         {
-            int startVertex = vertices.Count;
             float halfThickness = thickness * 0.5f;
 
-            for (int i = 0; i < points.Count; i++)
-            {
-                Vector2 lineOffset = GetLineOffset(points, i, halfThickness);
-
-                vertices.Add(points[i] - lineOffset);
-                vertices.Add(points[i] + lineOffset);
-            }
-
             for (int i = 0; i < points.Count - 1; i++)
+                AddRibbonSegment(points[i], points[i + 1], halfThickness);
+
+            if (roundLineCorners)
             {
-                int index = startVertex + i * 2;
-
-                triangles.Add(index);
-                triangles.Add(index + 1);
-                triangles.Add(index + 3);
-
-                triangles.Add(index);
-                triangles.Add(index + 3);
-                triangles.Add(index + 2);
+                for (int i = 1; i < points.Count - 1; i++)
+                    AddRoundJoin(points[i], halfThickness);
             }
 
             if (!roundCaps || capRoundness <= Epsilon)
@@ -674,47 +663,52 @@ namespace PhotoCountdown.Presentation.UI
             AddRoundedCap(points[last], endOutward, halfThickness);
         }
 
-        private Vector2 GetLineOffset(
-            IReadOnlyList<Vector2> points,
-            int index,
-            float halfThickness)
+        private void AddRibbonSegment(Vector2 start, Vector2 end, float halfThickness)
         {
-            if (index == 0)
+            Vector2 direction = end - start;
+
+            if (direction.sqrMagnitude <= Epsilon * Epsilon)
+                return;
+
+            direction.Normalize();
+
+            Vector2 offset = GetPerpendicular(direction) * halfThickness;
+            int startVertex = vertices.Count;
+
+            vertices.Add(start - offset);
+            vertices.Add(start + offset);
+            vertices.Add(end + offset);
+            vertices.Add(end - offset);
+
+            triangles.Add(startVertex);
+            triangles.Add(startVertex + 1);
+            triangles.Add(startVertex + 2);
+
+            triangles.Add(startVertex);
+            triangles.Add(startVertex + 2);
+            triangles.Add(startVertex + 3);
+        }
+
+        private void AddRoundJoin(Vector2 center, float radius)
+        {
+            int segmentCount = Mathf.Max(4, cornerSegments);
+            int centerIndex = vertices.Count;
+
+            vertices.Add(center);
+
+            for (int i = 0; i <= segmentCount; i++)
             {
-                Vector2 direction = (points[1] - points[0]).normalized;
-                return GetPerpendicular(direction) * halfThickness;
+                float angle = Mathf.PI * 2f * i / segmentCount;
+                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                vertices.Add(center + direction * radius);
             }
 
-            if (index == points.Count - 1)
+            for (int i = 0; i < segmentCount; i++)
             {
-                Vector2 direction = (points[index] - points[index - 1]).normalized;
-                return GetPerpendicular(direction) * halfThickness;
+                triangles.Add(centerIndex);
+                triangles.Add(centerIndex + i + 1);
+                triangles.Add(centerIndex + i + 2);
             }
-
-            Vector2 previousDirection =
-                (points[index] - points[index - 1]).normalized;
-
-            Vector2 nextDirection =
-                (points[index + 1] - points[index]).normalized;
-
-            Vector2 previousNormal = GetPerpendicular(previousDirection);
-            Vector2 nextNormal = GetPerpendicular(nextDirection);
-            Vector2 miter = previousNormal + nextNormal;
-
-            if (miter.sqrMagnitude <= Epsilon)
-                return nextNormal * halfThickness;
-
-            miter.Normalize();
-
-            float denominator = Vector2.Dot(miter, nextNormal);
-            float scale = Mathf.Abs(denominator) > Epsilon
-                ? halfThickness / denominator
-                : halfThickness;
-
-            float maximumScale = halfThickness * lineCornerLimit;
-            scale = Mathf.Clamp(scale, -maximumScale, maximumScale);
-
-            return miter * scale;
         }
 
         private void AddRoundedCap(
@@ -931,6 +925,7 @@ namespace PhotoCountdown.Presentation.UI
             capRoundness = Mathf.Clamp01(capRoundness);
             capSegments = Mathf.Clamp(capSegments, 2, 16);
             lineCornerLimit = Mathf.Max(1f, lineCornerLimit);
+            cornerSegments = Mathf.Clamp(cornerSegments, 4, 24);
             animationCycleDuration = Mathf.Max(0.01f, animationCycleDuration);
 
             rebuildRequested = true;
@@ -1018,4 +1013,3 @@ namespace PhotoCountdown.Presentation.UI
         }
     }
 }
-
