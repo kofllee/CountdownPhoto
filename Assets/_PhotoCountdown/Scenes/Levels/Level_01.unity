@@ -1618,8 +1618,7 @@ MonoBehaviour:
   _ringFill: {fileID: 1803041962}
   _timeText: {fileID: 279981413}
   _actionIcon: {fileID: 913193732}
-  _positiveColor: {r: 0, g: 1, b: 0, a: 1}
-  _negativeColor: {r: 1, g: 0, b: 0, a: 1}
+  _ringColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!60 &1340419230
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1758,10 +1757,10 @@ MonoBehaviour:
   _priority: 0
   _phases:
   - _action: {fileID: 11400000, guid: 0e216492f33993046a6698357178a784, type: 2}
-    _countdownType: 0
+    _countdownDisplay: 1
     _duration: 6
   - _action: {fileID: 11400000, guid: 318fcf3afe27c394b9a4bf2600b835e8, type: 2}
-    _countdownType: 1
+    _countdownDisplay: 2
     _duration: 3
 --- !u!1 &1438519722
 GameObject:

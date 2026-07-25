@@ -18,6 +18,7 @@ namespace _PhotoCountdown.Presentation.Characters
         [SerializeField, Min(0.01f)] private float _pulseDuration = 0.18f;
 
         private CharacterActionDefinition _shownAction;
+        private CharacterBehaviourPhase _shownPhase;
         private Vector3 _baseScale;
         private float _pulseElapsed;
         private bool _isReady;
@@ -38,10 +39,11 @@ namespace _PhotoCountdown.Presentation.Characters
             if (!_isReady)
                 InitializePresentation();
 
+            CharacterBehaviourPhase phase = _controller.CurrentPhase;
             CharacterActionDefinition action = GetDisplayedAction();
 
-            if (_shownAction != action)
-                ChangeAction(action);
+            if (_shownPhase != phase)
+                ChangeState(phase, action);
 
             bool isDragging = _controller.IsDragging;
 
@@ -56,6 +58,7 @@ namespace _PhotoCountdown.Presentation.Characters
 
         private void InitializePresentation()
         {
+            _shownPhase = _controller.CurrentPhase;
             _shownAction = GetDisplayedAction();
             _shownAction.Validate();
             _wasDragging = _controller.IsDragging;
@@ -63,15 +66,18 @@ namespace _PhotoCountdown.Presentation.Characters
             ApplyCurrentFrame();
             _isReady = true;
         }
-
-        private void ChangeAction(CharacterActionDefinition action)
+        
+        private void ChangeState(CharacterBehaviourPhase phase, CharacterActionDefinition action)
         {
             action.Validate();
+
+            _shownPhase = phase;
             _shownAction = action;
+
             ApplyCurrentFrame();
             PlayPulse();
         }
-
+        
         private CharacterActionDefinition GetDisplayedAction()
         {
             CharacterActionDefinition action = _controller.CurrentAction;
@@ -82,7 +88,7 @@ namespace _PhotoCountdown.Presentation.Characters
         {
             Sprite frame = _shownAction.GetFrameAt(_controller.CurrentPhaseElapsedTime);
 
-            if (frame == null)
+            if (!frame)
                 throw new InvalidOperationException($"{_shownAction.name} returned no frame.");
 
             _renderer.sprite = frame;
@@ -115,7 +121,7 @@ namespace _PhotoCountdown.Presentation.Characters
 
         private void OnDisable()
         {
-            if (_visualRoot != null)
+            if (_visualRoot)
                 _visualRoot.localScale = _baseScale;
 
             _isPulsing = false;

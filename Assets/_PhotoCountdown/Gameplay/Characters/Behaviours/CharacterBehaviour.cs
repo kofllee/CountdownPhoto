@@ -106,28 +106,41 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
 
             double cycleTime = elapsedTime % cycleDuration;
             int currentIndex = GetPhaseIndexAt(cycleTime, out double timeIntoPhase);
-
             CharacterBehaviourPhase currentPhase = _phases[currentIndex];
+
+            if (currentPhase.CountdownDisplay == CharacterCountdownDisplay.Hidden)
+                return CharacterCountdownInfo.Hidden;
+
             double remainingTime = currentPhase.Duration - timeIntoPhase;
-            double totalTime = currentPhase.Duration;
+            CharacterActionDefinition action = currentPhase.Action;
 
-            for (int offset = 1; offset <= _phases.Count; offset++)
-            {
-                int index = (currentIndex + offset) % _phases.Count;
-                CharacterBehaviourPhase phase = _phases[index];
+            if (!action && currentPhase.CountdownDisplay == CharacterCountdownDisplay.ActionIcon)
+                action = FindNextAction(currentIndex);
 
-                if (phase.Action && phase.CountdownType != CharacterCountdownType.Hidden)
-                {
-                    return new CharacterCountdownInfo(phase.Action, phase.CountdownType, remainingTime, totalTime);
-                }
+            if (!action && currentPhase.CountdownDisplay == CharacterCountdownDisplay.ActionIcon)
+                return CharacterCountdownInfo.Hidden;
 
-                remainingTime += phase.Duration;
-                totalTime += phase.Duration;
-            }
-
-            return CharacterCountdownInfo.Hidden;
+            return new CharacterCountdownInfo(
+                action,
+                currentPhase.CountdownDisplay,
+                remainingTime,
+                currentPhase.Duration);
         }
 
+        private CharacterActionDefinition FindNextAction(int currentIndex)
+        {
+            for (int offset = 1; offset < _phases.Count; offset++)
+            {
+                int index = (currentIndex + offset) % _phases.Count;
+                CharacterActionDefinition action = _phases[index].Action;
+
+                if (action)
+                    return action;
+            }
+
+            return null;
+        }
+        
         private int GetPhaseIndexAt(double cycleTime, out double timeIntoPhase)
         {
             double phaseStart = 0d;

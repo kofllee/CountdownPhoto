@@ -5,12 +5,21 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
     public readonly struct CharacterCountdownInfo
     {
         public CharacterActionDefinition Action { get; }
-        public CharacterCountdownType Type { get; }
+        public CharacterCountdownDisplay Display { get; }
         public double RemainingTime { get; }
         public double TotalTime { get; }
 
-        public bool IsVisible => Action != null && Type != CharacterCountdownType.Hidden;
-        
+        public bool IsVisible
+        {
+            get
+            {
+                if (Display == CharacterCountdownDisplay.Hidden)
+                    return false;
+
+                return Display != CharacterCountdownDisplay.ActionIcon || Action != null;
+            }
+        }
+
         public float Fill01
         {
             get
@@ -22,11 +31,14 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
             }
         }
 
-        
-        public CharacterCountdownInfo(CharacterActionDefinition action, CharacterCountdownType type, double remainingTime, double totalTime)
+        public CharacterCountdownInfo(
+            CharacterActionDefinition action,
+            CharacterCountdownDisplay display,
+            double remainingTime,
+            double totalTime)
         {
             Action = action;
-            Type = type;
+            Display = display;
             RemainingTime = remainingTime;
             TotalTime = totalTime;
         }

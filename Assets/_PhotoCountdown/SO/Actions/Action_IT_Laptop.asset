@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
   _displayName: Laptop
   _frames:
-  - {fileID: 0}
+  - {fileID: 7781202394294830402, guid: 9307bf5190b4f104ca50f3c26401e155, type: 3}
   _framesPerSecond: 6
   _icon: {fileID: 0}

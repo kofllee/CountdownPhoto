@@ -16,4 +16,4 @@ MonoBehaviour:
   _frames:
   - {fileID: -6950486346419376927, guid: 96dfb4553c9ca70498650cdaa1fa2184, type: 3}
   _framesPerSecond: 6
-  _icon: {fileID: 0}
+  _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}

@@ -8,11 +8,11 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
     public class CharacterBehaviourPhase
     {
         [SerializeField] private CharacterActionDefinition _action;
-        [SerializeField] private CharacterCountdownType _countdownType;
+        [SerializeField] private CharacterCountdownDisplay _countdownDisplay;
         [SerializeField, Min(0.01f)] private float _duration = 1f;
 
         public CharacterActionDefinition Action => _action;
-        public CharacterCountdownType CountdownType => _countdownType;
+        public CharacterCountdownDisplay CountdownDisplay => _countdownDisplay;
         public float Duration => _duration;
     }
 }
