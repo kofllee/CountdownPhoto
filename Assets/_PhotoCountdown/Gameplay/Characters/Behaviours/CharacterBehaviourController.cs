@@ -72,6 +72,19 @@ namespace _PhotoCountdown.Gameplay.Characters.Behaviours
                 return phase?.Duration ?? 0f;
             }
         }
+        
+        public double CurrentPhaseElapsedTime
+        {
+            get
+            {
+                CharacterBehaviourPhase phase = CurrentPhase;
+
+                if (phase == null)
+                    return 0d;
+
+                return System.Math.Max(0d, phase.Duration - CurrentPhaseRemainingTime);
+            }
+        }
 
         public CharacterActionDefinition CurrentAction => !_isInitialized ? null : GetActionAt(_clock.Time);
 

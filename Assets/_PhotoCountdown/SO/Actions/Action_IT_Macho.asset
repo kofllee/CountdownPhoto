@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c26be50feb36409eb4e7c558a8ea7bd2, type: 3}
-  m_Name: Action_Tongue
+  m_Name: Action_IT_Macho
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
-  _displayName: 
-  _type: 0
-  _animation: {fileID: 0}
-  _debugColor: {r: 0.49056602, g: 0.023139844, b: 0.411485, a: 1}
+  _displayName: Macho
+  _frames:
+  - {fileID: -6950486346419376927, guid: 96dfb4553c9ca70498650cdaa1fa2184, type: 3}
+  _framesPerSecond: 6
+  _icon: {fileID: 0}
