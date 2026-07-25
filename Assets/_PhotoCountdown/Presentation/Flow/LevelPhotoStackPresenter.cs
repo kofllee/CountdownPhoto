@@ -24,6 +24,10 @@ namespace _PhotoCountdown.Presentation.Flow
         [SerializeField] private PhotoView _frontPhoto;
         [SerializeField] private PhotoView _middlePhoto;
         [SerializeField] private PhotoView _backPhoto;
+        
+        [Header("Hit Area")]
+        [SerializeField, Range(0.01f, 1f)] private float _alphaHitThreshold = 0.1f;
+        
 
         private readonly List<PhotoResult> _photos = new();
         private readonly List<Texture2D> _createdTextures = new();
@@ -46,6 +50,7 @@ namespace _PhotoCountdown.Presentation.Flow
                 throw new ArgumentNullException(nameof(storage));
 
             ValidateReferences();
+            ConfigureHitArea();
             ClearPhotos();
 
             _storage = storage;
@@ -206,6 +211,22 @@ namespace _PhotoCountdown.Presentation.Flow
             ValidatePhoto(_middlePhoto, "middle");
             ValidatePhoto(_backPhoto, "back");
         }
+        
+        private void ConfigureHitArea()
+        {
+            _photosButton.targetGraphic = _stackSpriteImage;
+            _stackSpriteImage.raycastTarget = true;
+            _stackSpriteImage.alphaHitTestMinimumThreshold = _alphaHitThreshold;
+
+            SetPhotoRaycastTarget(_frontPhoto, false);
+            SetPhotoRaycastTarget(_middlePhoto, false);
+            SetPhotoRaycastTarget(_backPhoto, false);
+        }
+        
+        private static void SetPhotoRaycastTarget(PhotoView photo, bool value)
+        {
+            photo.SetRaycastTarget(value);
+        }
 
         private void ValidatePhoto(PhotoView photo, string photoName)
         {
@@ -243,6 +264,11 @@ namespace _PhotoCountdown.Presentation.Flow
 
                 if (_image == null)
                     throw new MissingReferenceException($"{ownerName} {photoName} has no image.");
+            }
+            
+            public void SetRaycastTarget(bool value)
+            {
+                _image.raycastTarget = value;
             }
         }
     }
