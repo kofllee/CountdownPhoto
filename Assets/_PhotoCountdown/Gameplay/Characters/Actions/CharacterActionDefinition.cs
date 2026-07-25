@@ -7,15 +7,46 @@ namespace _PhotoCountdown.Gameplay.Characters.Actions
     public class CharacterActionDefinition : ScriptableObject
     {
         [SerializeField] private string _displayName;
-        [SerializeField] private Sprite[] _frames;
+        [SerializeField] private CharacterSpriteTrack[] _spriteTracks;
         [SerializeField, Min(0.01f)] private float _framesPerSecond = 6f;
         [SerializeField] private Sprite _icon;
 
         public string DisplayName => _displayName;
         public Sprite Icon => _icon;
+        public int TrackCount => _spriteTracks?.Length ?? 0;
+
+        public Sprite GetFrameAt(int trackIndex, double elapsedTime)
+        {
+            if (_spriteTracks == null || trackIndex < 0 || trackIndex >= _spriteTracks.Length)
+                return null;
+
+            return _spriteTracks[trackIndex].GetFrameAt(elapsedTime, _framesPerSecond);
+        }
+
+        public void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(_displayName))
+                throw new InvalidOperationException($"{name} has no display name.");
+
+            if (_spriteTracks == null || _spriteTracks.Length == 0)
+                throw new InvalidOperationException($"{name} has no sprite tracks.");
+
+            for (int i = 0; i < _spriteTracks.Length; i++)
+                _spriteTracks[i].Validate(name, i);
+
+            if (_framesPerSecond <= 0f)
+                throw new InvalidOperationException($"{name} has an invalid frame rate.");
+        }
+    }
+
+    [Serializable]
+    public class CharacterSpriteTrack
+    {
+        [SerializeField] private Sprite[] _frames;
+
         public int FrameCount => _frames?.Length ?? 0;
 
-        public Sprite GetFrameAt(double elapsedTime)
+        public Sprite GetFrameAt(double elapsedTime, float framesPerSecond)
         {
             if (_frames == null || _frames.Length == 0)
                 return null;
@@ -24,26 +55,15 @@ namespace _PhotoCountdown.Gameplay.Characters.Actions
                 return _frames[0];
 
             float time = Mathf.Max(0f, (float)elapsedTime);
-            int frameIndex = Mathf.FloorToInt(time * _framesPerSecond);
+            int frameIndex = Mathf.FloorToInt(time * framesPerSecond);
             return _frames[frameIndex % _frames.Length];
         }
 
-        public void Validate()
+        public void Validate(string actionName, int trackIndex)
         {
-            if (string.IsNullOrWhiteSpace(_displayName))
-                throw new InvalidOperationException($"{name} has no display name.");
-
             if (_frames == null || _frames.Length == 0)
-                throw new InvalidOperationException($"{name} has no animation frames.");
-
-            foreach (Sprite frame in _frames)
-            {
-                if (frame == null)
-                    throw new InvalidOperationException($"{name} contains a missing frame.");
-            }
-
-            if (_framesPerSecond <= 0f)
-                throw new InvalidOperationException($"{name} has an invalid frame rate.");
+                throw new InvalidOperationException(
+                    $"{actionName} sprite track {trackIndex} has no frames.");
         }
     }
 }

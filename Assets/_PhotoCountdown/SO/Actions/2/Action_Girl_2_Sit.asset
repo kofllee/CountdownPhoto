@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c26be50feb36409eb4e7c558a8ea7bd2, type: 3}
-  m_Name: Action_IT_Macho
+  m_Name: Action_Girl_2_Sit
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
   _displayName: Macho
-  _frames:
-  - {fileID: -6950486346419376927, guid: 96dfb4553c9ca70498650cdaa1fa2184, type: 3}
+  _spriteTracks:
+  - _frames:
+    - {fileID: -84580336136241029, guid: 01793dedf6381344cbc6d7135120b64a, type: 3}
+  - _frames:
+    - {fileID: 0}
   _framesPerSecond: 6
-  _icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  _icon: {fileID: -4248504846962462674, guid: 16b0a017e58a20846a27c59131680d11, type: 3}

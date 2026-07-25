@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: d40f99a404efddc479626e52d12f7ddb
+guid: a320c7629b73c70459113a2b718648d4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3147085925924110749
-    second: ring 1_0
+      213: -2536932396341995772
+    second: "\u041B\u0438\u0446\u043E \u043E\u0431\u044B\u0447_0"
+  - first:
+      213: -4426579538064602493
+    second: "\u041B\u0438\u0446\u043E \u043E\u0431\u044B\u0447_1"
+  - first:
+      213: 6145075898763345305
+    second: "\u041B\u0438\u0446\u043E \u043E\u0431\u044B\u0447_2"
+  - first:
+      213: 5189761537390492676
+    second: "\u041B\u0438\u0446\u043E \u043E\u0431\u044B\u0447_3"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +122,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ring 1_0
+      name: "\u041B\u0438\u0446\u043E \u043E\u0431\u044B\u0447_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 148
-        height: 148
+        width: 1920
+        height: 1080
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 36e79ab360e4354d0800000000000000
-      internalID: -3147085925924110749
+      spriteID: 407dad04d610bccd0800000000000000
+      internalID: -2536932396341995772
       vertices: []
       indices: 
       edges: []
@@ -138,7 +147,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b1c8f51fd8f6660449c8d974abe0981a
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +155,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1920.0,"y":1080.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      ring 1_0: -3147085925924110749
+      "\u041B\u0438\u0446\u043E \u043E\u0431\u044B\u0447_0": -2536932396341995772
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

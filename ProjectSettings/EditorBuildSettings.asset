@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_PhotoCountdown/Scenes/Levels/Level_01.unity
     guid: 77e61a3d3736da34ca9c6d27361139e3
+  - enabled: 1
+    path: Assets/_PhotoCountdown/Scenes/Levels/Level_02.unity
+    guid: 38618e90a5910e5438ddbd1b09dc221c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

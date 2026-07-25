@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c26be50feb36409eb4e7c558a8ea7bd2, type: 3}
+  m_Name: Action_Girl_2_Kiss
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
+  _displayName: Macho
+  _spriteTracks:
+  - _frames:
+    - {fileID: 6914407146794961292, guid: dca35d962c3ba6748914afa542bfa788, type: 3}
+  - _frames:
+    - {fileID: -2536932396341995772, guid: a320c7629b73c70459113a2b718648d4, type: 3}
+  _framesPerSecond: 6
+  _icon: {fileID: -4248504846962462674, guid: 16b0a017e58a20846a27c59131680d11, type: 3}

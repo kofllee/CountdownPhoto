@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c26be50feb36409eb4e7c558a8ea7bd2, type: 3}
-  m_Name: Action_IT_Laptop
+  m_Name: Action_IT_2_Macho
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
   _displayName: Laptop
-  _frames:
-  - {fileID: 7781202394294830402, guid: 9307bf5190b4f104ca50f3c26401e155, type: 3}
+  _spriteTracks:
+  - _frames:
+    - {fileID: 4087034384406319509, guid: f290c41267d8bdd4490058946dacbb27, type: 3}
   _framesPerSecond: 6
-  _icon: {fileID: 0}
+  _icon: {fileID: -4248504846962462674, guid: 16b0a017e58a20846a27c59131680d11, type: 3}

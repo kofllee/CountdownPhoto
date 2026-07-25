@@ -7,6 +7,8 @@ namespace _PhotoCountdown.Gameplay.Characters
     public sealed class CharacterMover : MonoBehaviour
     {
         [SerializeField] private float _moveSpeed = 12f;
+
+        [Header("Optional Sorting")]
         [SerializeField] private SortingGroup _sortingGroup;
         [SerializeField] private int _dragSortingOrder = 1000;
 
@@ -14,7 +16,7 @@ namespace _PhotoCountdown.Gameplay.Characters
         private int _normalSortingOrder;
         private bool _isDragging;
         private Vector3 _dragPosition;
-        
+
         public bool IsSettled
         {
             get
@@ -34,20 +36,20 @@ namespace _PhotoCountdown.Gameplay.Characters
 
         public void Init(LevelCharacter character)
         {
-            if (_character != null)
+            if (_character)
                 throw new InvalidOperationException($"{name} is already initialized.");
 
-            if (character == null)
+            if (!character)
                 throw new ArgumentNullException(nameof(character));
 
-            if (_sortingGroup == null)
-                throw new MissingReferenceException($"{name} has no SortingGroup.");
-
-            if (character.CurrentSlot == null)
+            if (!character.CurrentSlot)
                 throw new MissingReferenceException($"{character.name} has no current slot.");
 
             _character = character;
-            _normalSortingOrder = _sortingGroup.sortingOrder;
+
+            if (_sortingGroup)
+                _normalSortingOrder = _sortingGroup.sortingOrder;
+
             transform.position = _character.CurrentSlot.transform.position;
             enabled = true;
         }
@@ -61,13 +63,17 @@ namespace _PhotoCountdown.Gameplay.Characters
         {
             _isDragging = true;
             _dragPosition = transform.position;
-            _sortingGroup.sortingOrder = _dragSortingOrder;
+
+            if (_sortingGroup)
+                _sortingGroup.sortingOrder = _dragSortingOrder;
         }
 
         public void EndDrag()
         {
             _isDragging = false;
-            _sortingGroup.sortingOrder = _normalSortingOrder;
+
+            if (_sortingGroup)
+                _sortingGroup.sortingOrder = _normalSortingOrder;
         }
 
         private void Update()

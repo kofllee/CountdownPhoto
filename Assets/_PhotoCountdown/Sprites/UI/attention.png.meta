@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: d40f99a404efddc479626e52d12f7ddb
+guid: 16b0a017e58a20846a27c59131680d11
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3147085925924110749
-    second: ring 1_0
+      213: -4248504846962462674
+    second: attention_0
+  - first:
+      213: 4365752360273284538
+    second: attention_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +116,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ring 1_0
+      name: attention_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 148
-        height: 148
+        width: 39
+        height: 83
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 36e79ab360e4354d0800000000000000
-      internalID: -3147085925924110749
+      spriteID: e20f64ae9574a05c0800000000000000
+      internalID: -4248504846962462674
       vertices: []
       indices: 
       edges: []
@@ -138,7 +141,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: da6cc21a8245b07409f02e0a84efc840
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +151,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ring 1_0: -3147085925924110749
+      attention_0: -4248504846962462674
+      attention_1: 4365752360273284538
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

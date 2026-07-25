@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: LevelCatalog
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Levels.LevelCatalog
   _levels:
+  - {fileID: 11400000, guid: a1b06707454d76d46b2ea6b32520a1b1, type: 2}
   - {fileID: 11400000, guid: c03b9c475059a734889c711300581ee9, type: 2}

@@ -11,7 +11,7 @@ namespace _PhotoCountdown.Presentation.Characters
         [SerializeField] private CharacterBehaviourController _controller;
         [SerializeField] private CharacterActionDefinition _idleAction;
         [SerializeField] private Transform _visualRoot;
-        [SerializeField] private SpriteRenderer _renderer;
+        [SerializeField] private SpriteRenderer[] _renderers;
 
         [Header("Pulse")]
         [SerializeField, Min(1f)] private float _pulseScale = 1.08f;
@@ -42,7 +42,7 @@ namespace _PhotoCountdown.Presentation.Characters
             CharacterBehaviourPhase phase = _controller.CurrentPhase;
             CharacterActionDefinition action = GetDisplayedAction();
 
-            if (_shownPhase != phase)
+            if (_shownPhase != phase || _shownAction != action)
                 ChangeState(phase, action);
 
             bool isDragging = _controller.IsDragging;
@@ -52,7 +52,7 @@ namespace _PhotoCountdown.Presentation.Characters
 
             _wasDragging = isDragging;
 
-            ApplyCurrentFrame();
+            ApplyCurrentFrames();
             UpdatePulse();
         }
 
@@ -60,39 +60,44 @@ namespace _PhotoCountdown.Presentation.Characters
         {
             _shownPhase = _controller.CurrentPhase;
             _shownAction = GetDisplayedAction();
-            _shownAction.Validate();
+
+            ValidateAction(_shownAction);
+
             _wasDragging = _controller.IsDragging;
             _visualRoot.localScale = _baseScale;
-            ApplyCurrentFrame();
+
+            ApplyCurrentFrames();
             _isReady = true;
         }
-        
+
         private void ChangeState(CharacterBehaviourPhase phase, CharacterActionDefinition action)
         {
-            action.Validate();
+            ValidateAction(action);
 
             _shownPhase = phase;
             _shownAction = action;
 
-            ApplyCurrentFrame();
+            ApplyCurrentFrames();
             PlayPulse();
         }
-        
+
         private CharacterActionDefinition GetDisplayedAction()
         {
             CharacterActionDefinition action = _controller.CurrentAction;
             return action ? action : _idleAction;
         }
 
-        private void ApplyCurrentFrame()
+        private void ApplyCurrentFrames()
         {
-            Sprite frame = _shownAction.GetFrameAt(_controller.CurrentPhaseElapsedTime);
+            double elapsedTime = _controller.CurrentPhaseElapsedTime;
 
-            if (!frame)
-                throw new InvalidOperationException($"{_shownAction.name} returned no frame.");
+            for (int i = 0; i < _renderers.Length; i++)
+            {
+                Sprite frame = _shownAction.GetFrameAt(i, elapsedTime);
 
-            _renderer.sprite = frame;
-            _renderer.color = Color.white;
+                _renderers[i].sprite = frame;
+                _renderers[i].color = Color.white;
+            }
         }
 
         private void PlayPulse()
@@ -107,9 +112,11 @@ namespace _PhotoCountdown.Presentation.Characters
                 return;
 
             _pulseElapsed += Time.deltaTime;
+
             float progress = Mathf.Clamp01(_pulseElapsed / _pulseDuration);
             float weight = Mathf.Sin(progress * Mathf.PI);
             float scale = Mathf.Lerp(1f, _pulseScale, weight);
+
             _visualRoot.localScale = _baseScale * scale;
 
             if (progress < 1f)
@@ -138,8 +145,14 @@ namespace _PhotoCountdown.Presentation.Characters
             if (_visualRoot == null)
                 throw new MissingReferenceException($"{name} has no visual root.");
 
-            if (_renderer == null)
-                throw new MissingReferenceException($"{name} has no sprite renderer.");
+            if (_renderers == null || _renderers.Length == 0)
+                throw new MissingReferenceException($"{name} has no sprite renderers.");
+
+            for (int i = 0; i < _renderers.Length; i++)
+            {
+                if (_renderers[i] == null)
+                    throw new MissingReferenceException($"{name} renderer {i} is missing.");
+            }
 
             if (_pulseScale < 1f)
                 throw new InvalidOperationException($"{name} has an invalid pulse scale.");
@@ -147,7 +160,22 @@ namespace _PhotoCountdown.Presentation.Characters
             if (_pulseDuration <= 0f)
                 throw new InvalidOperationException($"{name} has an invalid pulse duration.");
 
-            _idleAction.Validate();
+            ValidateAction(_idleAction);
+        }
+
+        private void ValidateAction(CharacterActionDefinition action)
+        {
+            if (action == null)
+                throw new MissingReferenceException($"{name} has no action to display.");
+
+            action.Validate();
+
+            if (action.TrackCount != _renderers.Length)
+            {
+                throw new InvalidOperationException(
+                    $"{action.name} has {action.TrackCount} sprite tracks, " +
+                    $"but {name} has {_renderers.Length} sprite renderers.");
+            }
         }
     }
 }
