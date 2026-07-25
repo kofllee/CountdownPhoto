@@ -59,6 +59,7 @@ namespace _PhotoCountdown.Presentation.Flow
         private Vector2 _photoCardDefaultPosition;
         private float _photoCardDefaultAngle;
         private bool _flashFinished = true;
+        private bool _isResultAnimating;
         private bool _isInitialized;
 
         public void Init(
@@ -183,7 +184,8 @@ namespace _PhotoCountdown.Presentation.Flow
             else
                 ClearFailures();
 
-            SetButtonsInteractable(false, photo.UnlocksNextLevel);
+            _isResultAnimating = true;
+            _nextButton.interactable = false;
             PreparePhotoCard();
 
             while (!_flashFinished)
@@ -223,7 +225,8 @@ namespace _PhotoCountdown.Presentation.Flow
             }
 
             ResetPhotoCard();
-            SetButtonsInteractable(true, photo.UnlocksNextLevel);
+            _isResultAnimating = false;
+            _nextButton.interactable = photo.UnlocksNextLevel;
             _resultRoutine = null;
         }
 
@@ -312,13 +315,6 @@ namespace _PhotoCountdown.Presentation.Flow
             }
         }
 
-        private void SetButtonsInteractable(bool interactable, bool nextUnlocked)
-        {
-            _backButton.interactable = interactable;
-            _retryButton.interactable = interactable;
-            _nextButton.interactable = interactable && nextUnlocked;
-        }
-
         private void SetFlashAlpha(float alpha)
         {
             Color color = _flashImage.color;
@@ -328,18 +324,26 @@ namespace _PhotoCountdown.Presentation.Flow
 
         private void OpenLevelSelect()
         {
+            if (_isResultAnimating)
+                return;
+
             _backRequested();
         }
 
         private void ReloadLevel()
         {
+            if (_isResultAnimating)
+                return;
+
             _retryRequested();
         }
 
         private void OpenNextLevel()
         {
-            if (_nextButton.interactable)
-                _nextRequested();
+            if (_isResultAnimating || !_nextButton.interactable)
+                return;
+
+            _nextRequested();
         }
 
         private void StopFlashRoutine()
