@@ -479,7 +479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -600,6 +600,8 @@ GameObject:
   - component: {fileID: 804271487}
   - component: {fileID: 804271486}
   - component: {fileID: 804271489}
+  - component: {fileID: 804271491}
+  - component: {fileID: 804271490}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -649,7 +651,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -723,6 +725,62 @@ MonoBehaviour:
   m_EffectColor: {r: 0.3207547, g: 0.17362529, b: 0.13616942, a: 0.60784316}
   m_EffectDistance: {x: 4, y: -4}
   m_UseGraphicAlpha: 1
+--- !u!114 &804271490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804271484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac2d2a64882413db1c2c98403b453e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.UI.ButtonVisualFeedback
+  scaleTarget: {fileID: 804271485}
+  colorTarget: {fileID: 0}
+  outline: {fileID: 804271491}
+  pressedScale: 1.05
+  scaleSpeed: 18
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoveredColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedColor: {r: 0.9058824, g: 0.7254902, b: 0.60784316, a: 1}
+  disabledColor: {r: 1, g: 1, b: 1, a: 0.5}
+  colorSpeed: 18
+  normalOutlineColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedOutlineColor: {r: 0.90588236, g: 0.7254902, b: 0.60784316, a: 1}
+  showOutlineWhenSelected: 1
+  restartOutlineAnimation: 1
+--- !u!114 &804271491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804271484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 824a8dc8670140e47aefd91aa305fed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhotoCountdown.Presentation.UI.DashedUIImageOutline
+  color: {r: 0.9215687, g: 0.90196085, b: 0.86274517, a: 1}
+  space: 12
+  thickness: 10
+  dashLength: 40
+  gapLength: 40
+  patternOffset: 0
+  fitWholeCycles: 1
+  automaticCycleCount: 1
+  cycleCount: 12
+  roundCaps: 1
+  capRoundness: 1
+  capSegments: 6
+  lineCornerLimit: 2.5
+  animate: 1
+  animateInEditMode: 1
+  animationCycleDuration: 2
+  reverseAnimation: 0
+  visible: 0
 --- !u!1 &835784790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,6 +1682,8 @@ GameObject:
   - component: {fileID: 1438519725}
   - component: {fileID: 1438519724}
   - component: {fileID: 1438519727}
+  - component: {fileID: 1438519729}
+  - component: {fileID: 1438519728}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1673,7 +1733,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1760,6 +1820,62 @@ MonoBehaviour:
   m_EffectColor: {r: 0.3207547, g: 0.17362529, b: 0.13616942, a: 0.60784316}
   m_EffectDistance: {x: 4, y: -4}
   m_UseGraphicAlpha: 1
+--- !u!114 &1438519728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438519722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 824a8dc8670140e47aefd91aa305fed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhotoCountdown.Presentation.UI.DashedUIImageOutline
+  color: {r: 0.9215687, g: 0.90196085, b: 0.86274517, a: 1}
+  space: 12
+  thickness: 10
+  dashLength: 40
+  gapLength: 40
+  patternOffset: 0
+  fitWholeCycles: 1
+  automaticCycleCount: 1
+  cycleCount: 12
+  roundCaps: 1
+  capRoundness: 1
+  capSegments: 6
+  lineCornerLimit: 2.5
+  animate: 1
+  animateInEditMode: 1
+  animationCycleDuration: 2
+  reverseAnimation: 0
+  visible: 0
+--- !u!114 &1438519729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438519722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac2d2a64882413db1c2c98403b453e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.UI.ButtonVisualFeedback
+  scaleTarget: {fileID: 1438519723}
+  colorTarget: {fileID: 0}
+  outline: {fileID: 1438519728}
+  pressedScale: 1.05
+  scaleSpeed: 18
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoveredColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedColor: {r: 0.9058824, g: 0.7254902, b: 0.60784316, a: 1}
+  disabledColor: {r: 1, g: 1, b: 1, a: 0.5}
+  colorSpeed: 18
+  normalOutlineColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedOutlineColor: {r: 0.90588236, g: 0.7254902, b: 0.60784316, a: 1}
+  showOutlineWhenSelected: 1
+  restartOutlineAnimation: 1
 --- !u!1 &1454162212
 GameObject:
   m_ObjectHideFlags: 0
