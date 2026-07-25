@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using _PhotoCountdown.Gameplay.Levels;
 using _PhotoCountdown.Gameplay.Photography;
@@ -18,6 +19,7 @@ namespace _PhotoCountdown.Presentation.Flow
         [Header("Photo")]
         [SerializeField] private Image _photoImage;
         [SerializeField] private TMP_Text _levelNameText;
+        [SerializeField] private RectTransform _photoCard;
 
         [Header("Stars")]
         [SerializeField] private Image _firstStar;
@@ -33,6 +35,17 @@ namespace _PhotoCountdown.Presentation.Flow
         [SerializeField] private Button _retryButton;
         [SerializeField] private Button _nextButton;
 
+        [Header("Flash")]
+        [SerializeField] private Image _flashImage;
+        [SerializeField, Min(0f)] private float _flashHoldDuration = 0.06f;
+        [SerializeField, Min(0.01f)] private float _flashFadeDuration = 0.45f;
+
+        [Header("Photo Card Animation")]
+        [SerializeField, Min(0f)] private float _cardDelay = 0.05f;
+        [SerializeField, Min(0.01f)] private float _cardEnterDuration = 0.55f;
+        [SerializeField, Min(0f)] private float _cardStartOffset = 900f;
+        [SerializeField, Range(-90f, 90f)] private float _cardStartAngle = 45f;
+
         private LevelDefinition _level;
         private PhotoCaptureController _photoCapture;
         private PhotoAlbumStorage _storage;
@@ -41,6 +54,11 @@ namespace _PhotoCountdown.Presentation.Flow
         private Action _nextRequested;
         private Texture2D _createdTexture;
         private Sprite _createdSprite;
+        private Coroutine _flashRoutine;
+        private Coroutine _resultRoutine;
+        private Vector2 _photoCardDefaultPosition;
+        private float _photoCardDefaultAngle;
+        private bool _flashFinished = true;
         private bool _isInitialized;
 
         public void Init(
@@ -81,6 +99,10 @@ namespace _PhotoCountdown.Presentation.Flow
             _retryRequested = retryRequested;
             _nextRequested = nextRequested;
 
+            _photoCardDefaultPosition = _photoCard.anchoredPosition;
+            _photoCardDefaultAngle = NormalizeAngle(_photoCard.localEulerAngles.z);
+
+            _photoCapture.PhotoCaptureStarted += HandlePhotoCaptureStarted;
             _photoCapture.PhotoCaptured += Show;
             _backButton.onClick.AddListener(OpenLevelSelect);
             _retryButton.onClick.AddListener(ReloadLevel);
@@ -88,9 +110,26 @@ namespace _PhotoCountdown.Presentation.Flow
 
             _gameHudRoot.SetActive(true);
             _resultRoot.SetActive(false);
+
+            SetFlashAlpha(0f);
+            _flashImage.gameObject.SetActive(false);
+
             ClearFailures();
+            ResetPhotoCard();
 
             _isInitialized = true;
+        }
+
+        private void HandlePhotoCaptureStarted()
+        {
+            StopFlashRoutine();
+
+            _flashFinished = false;
+            _flashImage.gameObject.SetActive(true);
+            _flashImage.transform.SetAsLastSibling();
+            SetFlashAlpha(1f);
+
+            _flashRoutine = StartCoroutine(PlayFlash());
         }
 
         private void Show(PhotoResult photo, IReadOnlyList<string> visibleFailures)
@@ -101,6 +140,39 @@ namespace _PhotoCountdown.Presentation.Flow
             if (photo.LevelId != _level.Id)
                 throw new InvalidOperationException($"Photo {photo.Id} belongs to another level.");
 
+            StopResultRoutine();
+            _resultRoutine = StartCoroutine(ShowResult(photo, visibleFailures));
+        }
+
+        private IEnumerator PlayFlash()
+        {
+            if (_flashHoldDuration > 0f)
+                yield return new WaitForSecondsRealtime(_flashHoldDuration);
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _flashFadeDuration)
+            {
+                elapsedTime += Time.unscaledDeltaTime;
+
+                float progress = Mathf.Clamp01(elapsedTime / _flashFadeDuration);
+                float easedProgress = SmoothStep(progress);
+
+                SetFlashAlpha(1f - easedProgress);
+                yield return null;
+            }
+
+            SetFlashAlpha(0f);
+            _flashImage.gameObject.SetActive(false);
+
+            _flashFinished = true;
+            _flashRoutine = null;
+        }
+
+        private IEnumerator ShowResult(
+            PhotoResult photo,
+            IReadOnlyList<string> visibleFailures)
+        {
             LoadPhoto(photo);
             _levelNameText.text = _level.DisplayName;
 
@@ -111,16 +183,73 @@ namespace _PhotoCountdown.Presentation.Flow
             else
                 ClearFailures();
 
-            _nextButton.interactable = photo.UnlocksNextLevel;
+            SetButtonsInteractable(false, photo.UnlocksNextLevel);
+            PreparePhotoCard();
+
+            while (!_flashFinished)
+                yield return null;
+
+            if (_cardDelay > 0f)
+                yield return new WaitForSecondsRealtime(_cardDelay);
 
             _gameHudRoot.SetActive(false);
             _resultRoot.SetActive(true);
+
+            Vector2 startPosition = _photoCard.anchoredPosition;
+            float startAngle = NormalizeAngle(_photoCard.localEulerAngles.z);
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _cardEnterDuration)
+            {
+                elapsedTime += Time.unscaledDeltaTime;
+
+                float progress = Mathf.Clamp01(elapsedTime / _cardEnterDuration);
+                float positionProgress = EaseOutCubic(progress);
+                float rotationProgress = SmoothStep(progress);
+
+                _photoCard.anchoredPosition = Vector2.LerpUnclamped(
+                    startPosition,
+                    _photoCardDefaultPosition,
+                    positionProgress);
+
+                float angle = Mathf.LerpUnclamped(
+                    startAngle,
+                    _photoCardDefaultAngle,
+                    rotationProgress);
+
+                _photoCard.localRotation = Quaternion.Euler(0f, 0f, angle);
+
+                yield return null;
+            }
+
+            ResetPhotoCard();
+            SetButtonsInteractable(true, photo.UnlocksNextLevel);
+            _resultRoutine = null;
+        }
+
+        private void PreparePhotoCard()
+        {
+            _photoCard.anchoredPosition =
+                _photoCardDefaultPosition + Vector2.up * _cardStartOffset;
+
+            float angle = _photoCardDefaultAngle + _cardStartAngle;
+            _photoCard.localRotation = Quaternion.Euler(0f, 0f, angle);
+        }
+
+        private void ResetPhotoCard()
+        {
+            _photoCard.anchoredPosition = _photoCardDefaultPosition;
+            _photoCard.localRotation =
+                Quaternion.Euler(0f, 0f, _photoCardDefaultAngle);
         }
 
         private void ApplyStars(LevelRank rank)
         {
-            _firstStar.sprite = rank >= LevelRank.OneStar ? _goldStarSprite : _grayStarSprite;
-            _secondStar.sprite = rank >= LevelRank.TwoStars ? _goldStarSprite : _grayStarSprite;
+            _firstStar.sprite =
+                rank >= LevelRank.OneStar ? _goldStarSprite : _grayStarSprite;
+
+            _secondStar.sprite =
+                rank >= LevelRank.TwoStars ? _goldStarSprite : _grayStarSprite;
 
             _firstStar.gameObject.SetActive(true);
             _secondStar.gameObject.SetActive(true);
@@ -183,6 +312,20 @@ namespace _PhotoCountdown.Presentation.Flow
             }
         }
 
+        private void SetButtonsInteractable(bool interactable, bool nextUnlocked)
+        {
+            _backButton.interactable = interactable;
+            _retryButton.interactable = interactable;
+            _nextButton.interactable = interactable && nextUnlocked;
+        }
+
+        private void SetFlashAlpha(float alpha)
+        {
+            Color color = _flashImage.color;
+            color.a = alpha;
+            _flashImage.color = color;
+        }
+
         private void OpenLevelSelect()
         {
             _backRequested();
@@ -197,6 +340,24 @@ namespace _PhotoCountdown.Presentation.Flow
         {
             if (_nextButton.interactable)
                 _nextRequested();
+        }
+
+        private void StopFlashRoutine()
+        {
+            if (_flashRoutine == null)
+                return;
+
+            StopCoroutine(_flashRoutine);
+            _flashRoutine = null;
+        }
+
+        private void StopResultRoutine()
+        {
+            if (_resultRoutine == null)
+                return;
+
+            StopCoroutine(_resultRoutine);
+            _resultRoutine = null;
         }
 
         private void ReleasePhoto()
@@ -214,10 +375,32 @@ namespace _PhotoCountdown.Presentation.Flow
             _createdTexture = null;
         }
 
+        private static float SmoothStep(float progress)
+        {
+            return progress * progress * (3f - 2f * progress);
+        }
+
+        private static float EaseOutCubic(float progress)
+        {
+            float remaining = 1f - progress;
+            return 1f - remaining * remaining * remaining;
+        }
+
+        private static float NormalizeAngle(float angle)
+        {
+            return angle > 180f ? angle - 360f : angle;
+        }
+
         private void OnDestroy()
         {
+            StopFlashRoutine();
+            StopResultRoutine();
+
             if (_photoCapture != null)
+            {
+                _photoCapture.PhotoCaptureStarted -= HandlePhotoCaptureStarted;
                 _photoCapture.PhotoCaptured -= Show;
+            }
 
             if (_backButton != null)
                 _backButton.onClick.RemoveListener(OpenLevelSelect);
@@ -245,6 +428,9 @@ namespace _PhotoCountdown.Presentation.Flow
             if (!_levelNameText)
                 throw new MissingReferenceException($"{name} has no level name text.");
 
+            if (!_photoCard)
+                throw new MissingReferenceException($"{name} has no photo card.");
+
             if (!_firstStar || !_secondStar)
                 throw new MissingReferenceException($"{name} has missing star images.");
 
@@ -252,7 +438,7 @@ namespace _PhotoCountdown.Presentation.Flow
                 throw new MissingReferenceException($"{name} has missing star sprites.");
 
             if (_failureTexts == null || _failureTexts.Length != 3)
-                throw new MissingReferenceException($"{name} must have exactly three failure texts.");
+                throw new MissingReferenceException($"{name} must have three failure texts.");
 
             foreach (TMP_Text failureText in _failureTexts)
             {
@@ -262,6 +448,9 @@ namespace _PhotoCountdown.Presentation.Flow
 
             if (!_backButton || !_retryButton || !_nextButton)
                 throw new MissingReferenceException($"{name} has missing result buttons.");
+
+            if (!_flashImage)
+                throw new MissingReferenceException($"{name} has no flash image.");
         }
     }
 }

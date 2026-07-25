@@ -28,6 +28,7 @@ namespace _PhotoCountdown.Gameplay.Photography
         private bool _isInitialized;
         private bool _isCapturing;
 
+        public event Action PhotoCaptureStarted;
         public event Action<PhotoResult, IReadOnlyList<string>> PhotoCaptured;
 
         public PhotoResult LastPhoto { get; private set; }
@@ -164,6 +165,7 @@ namespace _PhotoCountdown.Gameplay.Photography
 {
     _isCapturing = true;
     _dragInput.enabled = false;
+    PhotoCaptureStarted?.Invoke();
 
     bool resultShown = false;
     double photoTime = _clock.Time;
