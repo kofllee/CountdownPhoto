@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using _PhotoCountdown.Gameplay.Levels;
 using _PhotoCountdown.Gameplay.Photography;
 using _PhotoCountdown.Presentation.Flow;
+using _PhotoCountdown.Presentation.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +13,7 @@ namespace _PhotoCountdown.Gameplay.Flow
     {
         [SerializeField] private Transform _itemsRoot;
         [SerializeField] private Button _backButton;
+        [SerializeField] private UISlideInFromBottom _boardAnimation;
 
         private GameFlowController _flow;
 
@@ -32,6 +35,14 @@ namespace _PhotoCountdown.Gameplay.Flow
 
                 item.Init(rank, unlocked, photos, session.PhotoStorage, OpenLevel);
             }
+
+            _boardAnimation.PlayIn();
+        }
+
+        protected override IEnumerator OnExit()
+        {
+            _backButton.interactable = false;
+            yield return _boardAnimation.PlayOut();
         }
 
         private void OnDestroy()
@@ -57,6 +68,9 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             if (!_backButton)
                 throw new MissingReferenceException($"{name} has no back button.");
+
+            if (!_boardAnimation)
+                throw new MissingReferenceException($"{name} has no board animation.");
         }
 
         private static void ValidateItems(GameSession session, LevelSelectItem[] items)

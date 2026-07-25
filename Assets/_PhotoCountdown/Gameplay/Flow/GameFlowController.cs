@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using _PhotoCountdown.Gameplay.Levels;
+using _PhotoCountdown.Presentation.Flow;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,8 +11,10 @@ namespace _PhotoCountdown.Gameplay.Flow
     {
         [SerializeField] private string _mainMenuSceneName = "MainMenu";
         [SerializeField] private string _levelSelectSceneName = "LevelSelect";
+        [SerializeField] private SceneTransitionOverlay _transition;
 
         private GameSession _session;
+        private GameSceneEntry _currentEntry;
         private bool _isInitialized;
         private bool _isTransitioning;
 
@@ -31,6 +34,9 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             if (string.IsNullOrWhiteSpace(_levelSelectSceneName))
                 throw new MissingReferenceException($"{name} has no level select scene name.");
+
+            if (_transition == null)
+                throw new MissingReferenceException($"{name} has no scene transition.");
 
             _session = session;
             _isInitialized = true;
@@ -105,19 +111,23 @@ namespace _PhotoCountdown.Gameplay.Flow
 
         private IEnumerator LoadSceneRoutine(string sceneName)
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-
-            if (operation == null)
-            {
-                _isTransitioning = false;
-                throw new InvalidOperationException($"Failed to start loading {sceneName}.");
-            }
-
-            while (!operation.isDone)
-                yield return null;
-
             try
             {
+                if (_currentEntry != null)
+                    yield return _currentEntry.Exit();
+
+                yield return _transition.FadeOut();
+
+                _currentEntry = null;
+
+                AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+
+                if (operation == null)
+                    throw new InvalidOperationException($"Failed to start loading {sceneName}.");
+
+                while (!operation.isDone)
+                    yield return null;
+
                 Scene scene = SceneManager.GetActiveScene();
 
                 if (scene.name != sceneName)
@@ -125,6 +135,10 @@ namespace _PhotoCountdown.Gameplay.Flow
 
                 GameSceneEntry entry = FindSceneEntry(scene);
                 entry.Init(_session, this);
+                _currentEntry = entry;
+
+                yield return null;
+                yield return _transition.FadeIn();
             }
             finally
             {

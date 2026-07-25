@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Flow
@@ -22,6 +23,19 @@ namespace _PhotoCountdown.Gameplay.Flow
             IsInitialized = true;
         }
 
+        public IEnumerator Exit()
+        {
+            if (!IsInitialized)
+                yield break;
+
+            yield return OnExit();
+        }
+
         protected abstract void OnInit(GameSession session, GameFlowController flow);
+
+        protected virtual IEnumerator OnExit()
+        {
+            yield break;
+        }
     }
 }
