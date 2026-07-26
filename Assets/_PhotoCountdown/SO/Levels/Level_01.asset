@@ -16,3 +16,4 @@ MonoBehaviour:
   _displayName: Level 1
   _sceneName: Level_01
   _preview: {fileID: 0}
+  _introComment: "First day on the job\u2026 I just need to catch the perfect moment."

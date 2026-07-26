@@ -41,41 +41,22 @@ namespace _PhotoCountdown.Presentation.UI
         private bool isSelected;
         private bool isPressed;
         private bool lastInteractable;
+        private bool isInitialized;
 
         private void Awake()
         {
-            CacheReferences();
-
-            defaultScale = scaleTarget.localScale;
-            targetScale = defaultScale;
-            targetColor = normalColor;
-            lastInteractable = button.interactable;
-
-            button.transition = Selectable.Transition.None;
-            colorTarget.color = button.interactable ? normalColor : disabledColor;
-            outline.SetColor(normalOutlineColor);
-            outline.Hide();
+            Initialize();
         }
 
         private void OnEnable()
         {
-            CacheReferences();
-
-            defaultScale = scaleTarget.localScale;
-            targetScale = defaultScale;
-            targetColor = button.interactable ? normalColor : disabledColor;
-            lastInteractable = button.interactable;
+            Initialize();
 
             isHovered = false;
             isSelected = false;
             isPressed = false;
 
-            button.transition = Selectable.Transition.None;
-            scaleTarget.localScale = defaultScale;
-            colorTarget.color = targetColor;
-            outline.SetColor(normalOutlineColor);
-
-            UpdateVisualState();
+            RefreshImmediate();
         }
 
         private void OnDisable()
@@ -84,7 +65,10 @@ namespace _PhotoCountdown.Presentation.UI
                 scaleTarget.localScale = defaultScale;
 
             if (colorTarget != null)
+            {
+                ResetCanvasRendererTint();
                 colorTarget.color = normalColor;
+            }
 
             if (outline != null)
             {
@@ -99,24 +83,8 @@ namespace _PhotoCountdown.Presentation.UI
 
         private void Update()
         {
-            bool interactable = button.interactable;
-
-            if (interactable != lastInteractable)
-            {
-                lastInteractable = interactable;
-
-                if (!interactable)
-                {
-                    isHovered = false;
-                    isSelected = false;
-                    isPressed = false;
-                }
-
-                UpdateVisualState();
-
-                scaleTarget.localScale = targetScale;
-                colorTarget.color = targetColor;
-            }
+            if (button.interactable != lastInteractable)
+                RefreshImmediate();
 
             float scaleFactor = 1f - Mathf.Exp(-scaleSpeed * Time.unscaledDeltaTime);
             float colorFactor = 1f - Mathf.Exp(-colorSpeed * Time.unscaledDeltaTime);
@@ -125,6 +93,26 @@ namespace _PhotoCountdown.Presentation.UI
                 Vector3.Lerp(scaleTarget.localScale, targetScale, scaleFactor);
 
             colorTarget.color = Color.Lerp(colorTarget.color, targetColor, colorFactor);
+        }
+
+        public void RefreshImmediate()
+        {
+            Initialize();
+
+            lastInteractable = button.interactable;
+
+            if (!lastInteractable)
+            {
+                isHovered = false;
+                isSelected = false;
+                isPressed = false;
+            }
+
+            ResetCanvasRendererTint();
+            UpdateVisualState();
+
+            scaleTarget.localScale = targetScale;
+            colorTarget.color = targetColor;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -183,6 +171,24 @@ namespace _PhotoCountdown.Presentation.UI
             UpdateVisualState();
         }
 
+        private void Initialize()
+        {
+            CacheReferences();
+
+            button.transition = Selectable.Transition.None;
+            ResetCanvasRendererTint();
+
+            if (isInitialized)
+                return;
+
+            defaultScale = scaleTarget.localScale;
+            targetScale = defaultScale;
+            targetColor = button.interactable ? normalColor : disabledColor;
+            lastInteractable = button.interactable;
+
+            isInitialized = true;
+        }
+
         private void CacheReferences()
         {
             if (button == null)
@@ -208,6 +214,14 @@ namespace _PhotoCountdown.Presentation.UI
                 throw new MissingReferenceException(
                     $"{name} has no {nameof(DashedUIImageOutline)}.");
             }
+        }
+
+        private void ResetCanvasRendererTint()
+        {
+            if (colorTarget == null)
+                return;
+
+            colorTarget.canvasRenderer.SetColor(Color.white);
         }
 
         private DashedUIImageOutline FindOutline()
@@ -282,7 +296,10 @@ namespace _PhotoCountdown.Presentation.UI
             button.transition = Selectable.Transition.None;
 
             if (colorTarget != null)
+            {
+                ResetCanvasRendererTint();
                 normalColor = colorTarget.color;
+            }
 
             if (outline != null)
                 outline.Hide();

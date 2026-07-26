@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using _PhotoCountdown.Gameplay.Levels;
 using _PhotoCountdown.Presentation.Flow;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace _PhotoCountdown.Gameplay.Flow
         [SerializeField] private LevelDefinition _level;
         [SerializeField] private LevelController _levelController;
         [SerializeField] private PhotoResultPresenter _resultPresenter;
+        [SerializeField] private LevelIntroCommentPresenter _introCommentPresenter;
         [SerializeField] private Button _backButton;
 
         private GameFlowController _flow;
@@ -37,12 +39,35 @@ namespace _PhotoCountdown.Gameplay.Flow
                 flow.ReloadCurrentLevel,
                 flow.OpenNextLevel);
 
+            _introCommentPresenter.Init();
             _backButton.onClick.AddListener(OpenLevelSelect);
+
+            StartCoroutine(ShowIntroIfNeeded(session));
+        }
+
+        private IEnumerator ShowIntroIfNeeded(GameSession session)
+        {
+            LevelRank bestRank = session.Album.GetBestRank(_level.Id);
+            bool shouldShow = bestRank == LevelRank.Failed && _level.HasIntroComment;
+
+            if (!shouldShow)
+            {
+                _introCommentPresenter.HideImmediate();
+                yield break;
+            }
+
+            _levelController.SetGameplayPaused(true);
+            _backButton.interactable = false;
+
+            yield return _introCommentPresenter.ShowAndWait(_level.IntroComment);
+
+            _backButton.interactable = true;
+            _levelController.SetGameplayPaused(false);
         }
 
         private void OnDestroy()
         {
-            if (_backButton != null)
+            if (_backButton)
                 _backButton.onClick.RemoveListener(OpenLevelSelect);
         }
 
@@ -61,6 +86,9 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             if (!_resultPresenter)
                 throw new MissingReferenceException($"{name} has no result presenter.");
+
+            if (!_introCommentPresenter)
+                throw new MissingReferenceException($"{name} has no intro comment presenter.");
 
             if (!_backButton)
                 throw new MissingReferenceException($"{name} has no back button.");

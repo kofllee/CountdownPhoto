@@ -10,11 +10,14 @@ namespace _PhotoCountdown.Gameplay.Levels
         [SerializeField] private string _displayName;
         [SerializeField] private string _sceneName;
         [SerializeField] private Sprite _preview;
+        [SerializeField, TextArea(2, 5)] private string _introComment;
 
         public string Id => _id;
         public string DisplayName => _displayName;
         public string SceneName => _sceneName;
         public Sprite Preview => _preview;
+        public string IntroComment => _introComment;
+        public bool HasIntroComment => !string.IsNullOrWhiteSpace(_introComment);
 
         public void Validate()
         {

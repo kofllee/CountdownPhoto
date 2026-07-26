@@ -76,6 +76,19 @@ namespace _PhotoCountdown.Gameplay.Levels
 
             IsInitialized = true;
         }
+        
+        public void SetGameplayPaused(bool paused)
+        {
+            if (!IsInitialized)
+                throw new InvalidOperationException($"{name} is not initialized.");
+
+            _dragInput.enabled = !paused;
+
+            if (paused)
+                _clock.PauseClock();
+            else
+                _clock.ResumeClock();
+        }
 
         private void InitCharacterBehaviour(
             LevelCharacter character,
