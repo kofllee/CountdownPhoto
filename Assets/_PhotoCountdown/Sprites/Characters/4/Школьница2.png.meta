@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 1ea8f4f701bf33843a35c4281492a6b8
+guid: 69079eeb33ac4f248a34865fe83218b1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7798617928352792740
-    second: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_0"
-  - first:
-      213: 4943385588305479657
-    second: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_1"
+      213: 1396294213221198520
+    second: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04302_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_0"
+      name: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04302_0"
       rect:
         serializedVersion: 2
         x: 0
@@ -131,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5ff981205eb5c390800000000000000
-      internalID: -7798617928352792740
+      spriteID: 8baabf46032a06310800000000000000
+      internalID: 1396294213221198520
       vertices: []
       indices: 
       edges: []
@@ -141,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b54a67ff09d9f9d49ab1277ac32e91c0
+    spriteID: 5da120e259a6a90438d6ccb4b4246c22
     internalID: 0
     vertices: []
     indices: 
@@ -153,7 +150,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":433.0,"y":852.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_0": -7798617928352792740
+      "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04302_0": 1396294213221198520
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c26be50feb36409eb4e7c558a8ea7bd2, type: 3}
+  m_Name: Action_Girl_4_Heart
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
+  _displayName: 
+  _spriteTracks:
+  - _frames:
+    - {fileID: -8196706169172302019, guid: a7a67285746318b4f937f716c3043f26, type: 3}
+  _framesPerSecond: 6
+  _icon: {fileID: 0}
+  _enterSounds: []
+  _enterSoundChance: 0.35
+  _enterSoundVolume: 1

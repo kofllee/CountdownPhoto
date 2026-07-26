@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 1ea8f4f701bf33843a35c4281492a6b8
+guid: 1c96a89526e0b98468d3243fd0654315
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7798617928352792740
-    second: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_0"
-  - first:
-      213: 4943385588305479657
-    second: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_1"
+      213: -41117287880557358
+    second: "\u041F\u0435\u0440\u0435\u0434\u043D\u0438\u043A_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_0"
+      name: "\u041F\u0435\u0440\u0435\u0434\u043D\u0438\u043A_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 433
-        height: 852
+        width: 1920
+        height: 1080
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5ff981205eb5c390800000000000000
-      internalID: -7798617928352792740
+      spriteID: 2dc70c56b0ced6ff0800000000000000
+      internalID: -41117287880557358
       vertices: []
       indices: 
       edges: []
@@ -141,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b54a67ff09d9f9d49ab1277ac32e91c0
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -149,11 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":433.0,"y":852.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      "\u0428\u043A\u043E\u043B\u044C\u043D\u0438\u0446\u04301_0": -7798617928352792740
+      "\u041F\u0435\u0440\u0435\u0434\u043D\u0438\u043A_0": -41117287880557358
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -12,6 +12,8 @@ namespace _PhotoCountdown.Gameplay.Flow
         [SerializeField] private string _mainMenuSceneName = "MainMenu";
         [SerializeField] private string _levelSelectSceneName = "LevelSelect";
         [SerializeField] private SceneTransitionOverlay _transition;
+        
+        private bool _openCreditsOnMainMenuLoad;
 
         private GameSession _session;
         private GameSceneEntry _currentEntry;
@@ -44,8 +46,32 @@ namespace _PhotoCountdown.Gameplay.Flow
 
         public void OpenMainMenu()
         {
+            OpenMainMenu(false);
+        }
+
+        public void OpenMainMenuWithCredits()
+        {
+            OpenMainMenu(true);
+        }
+
+        public bool ConsumeCreditsOpenRequest()
+        {
+            bool requested = _openCreditsOnMainMenuLoad;
+            _openCreditsOnMainMenuLoad = false;
+            return requested;
+        }
+
+        private void OpenMainMenu(bool openCredits)
+        {
+            _openCreditsOnMainMenuLoad = openCredits;
+
             if (BeginLoad(_mainMenuSceneName))
+            {
                 CurrentLevel = null;
+                return;
+            }
+
+            _openCreditsOnMainMenuLoad = false;
         }
 
         public void OpenLevelSelect()
@@ -83,7 +109,7 @@ namespace _PhotoCountdown.Gameplay.Flow
 
             if (nextLevel == null)
             {
-                OpenLevelSelect();
+                OpenMainMenuWithCredits();
                 return;
             }
 
