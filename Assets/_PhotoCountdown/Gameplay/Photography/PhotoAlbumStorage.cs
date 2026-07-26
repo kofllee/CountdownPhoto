@@ -89,6 +89,14 @@ namespace _PhotoCountdown.Gameplay.Photography
 
             return album;
         }
+        
+        public void DeleteAll()
+        {
+            if (Directory.Exists(_albumDirectory))
+                Directory.Delete(_albumDirectory, true);
+
+            WebGlFileSystemSync.Request();
+        }
 
         public void SaveNewPhoto(PhotoAlbum album, PhotoResult photo, byte[] pngData)
         {

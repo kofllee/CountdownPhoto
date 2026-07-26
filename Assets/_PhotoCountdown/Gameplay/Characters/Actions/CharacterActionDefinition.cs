@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _PhotoCountdown.Gameplay.Characters.Actions
 {
@@ -10,6 +11,22 @@ namespace _PhotoCountdown.Gameplay.Characters.Actions
         [SerializeField] private CharacterSpriteTrack[] _spriteTracks;
         [SerializeField, Min(0.01f)] private float _framesPerSecond = 6f;
         [SerializeField] private Sprite _icon;
+        
+        [Header("Sound")]
+        [SerializeField] private AudioClip[] _enterSounds;
+        [SerializeField, Range(0f, 1f)] private float _enterSoundChance = 0.35f;
+        [SerializeField, Range(0f, 1f)] private float _enterSoundVolume = 1f;
+
+        public float EnterSoundChance => _enterSoundChance;
+        public float EnterSoundVolume => _enterSoundVolume;
+
+        public AudioClip GetRandomEnterSound()
+        {
+            if (_enterSounds == null || _enterSounds.Length == 0)
+                return null;
+
+            return _enterSounds[Random.Range(0, _enterSounds.Length)];
+        }
 
         public string DisplayName => _displayName;
         public Sprite Icon => _icon;
@@ -36,6 +53,15 @@ namespace _PhotoCountdown.Gameplay.Characters.Actions
 
             if (_framesPerSecond <= 0f)
                 throw new InvalidOperationException($"{name} has an invalid frame rate.");
+            
+            if (_enterSounds != null)
+            {
+                for (int i = 0; i < _enterSounds.Length; i++)
+                {
+                    if (!_enterSounds[i])
+                        throw new InvalidOperationException($"{name} enter sound {i} is missing.");
+                }
+            }
         }
     }
 

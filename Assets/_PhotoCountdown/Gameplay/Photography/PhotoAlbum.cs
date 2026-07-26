@@ -21,6 +21,12 @@ namespace _PhotoCountdown.Gameplay.Photography
 
             _photos.Add(photo);
         }
+        
+        public void Clear()
+        {
+            _photos.Clear();
+            _photoIds.Clear();
+        }
 
         public bool Contains(string photoId)
         {

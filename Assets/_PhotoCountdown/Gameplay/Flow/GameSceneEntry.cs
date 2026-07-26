@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
+using _PhotoCountdown.Presentation.Audio;
 using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Flow
 {
     public abstract class GameSceneEntry : MonoBehaviour
     {
+        [SerializeField] private SceneAudioInstaller _audioInstaller;
+
         public bool IsInitialized { get; private set; }
 
         public void Init(GameSession session, GameFlowController flow)
@@ -19,6 +22,10 @@ namespace _PhotoCountdown.Gameplay.Flow
             if (flow == null)
                 throw new ArgumentNullException(nameof(flow));
 
+            if (!_audioInstaller)
+                throw new MissingReferenceException($"{name} has no scene audio installer.");
+
+            _audioInstaller.Init(session.Audio);
             OnInit(session, flow);
             IsInitialized = true;
         }
