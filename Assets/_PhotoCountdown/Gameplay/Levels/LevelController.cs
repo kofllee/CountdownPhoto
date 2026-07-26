@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _PhotoCountdown.Gameplay.Characters;
 using _PhotoCountdown.Gameplay.Characters.Behaviours;
+using _PhotoCountdown.Gameplay.Interactions;
 using _PhotoCountdown.Gameplay.Neighbors;
 using _PhotoCountdown.Gameplay.Objectives;
 using _PhotoCountdown.Gameplay.Photography;
@@ -40,6 +41,7 @@ namespace _PhotoCountdown.Gameplay.Levels
 
             LevelCharacter[] characters = _levelContentRoot.GetComponentsInChildren<LevelCharacter>(true);
             PhotoObjective[] objectives = _levelContentRoot.GetComponentsInChildren<PhotoObjective>(true);
+            TimedDisappearInteraction[] interactions = _levelContentRoot.GetComponentsInChildren<TimedDisappearInteraction>(true);
 
             ValidateCharacters(characters);
 
@@ -55,6 +57,9 @@ namespace _PhotoCountdown.Gameplay.Levels
 
             _dragInput.Init(placement);
             _clock.StartClock();
+            
+            foreach (TimedDisappearInteraction interaction in interactions)
+                interaction.Init(_clock);
 
             foreach (LevelCharacter character in characters)
                 InitCharacterBehaviour(character, neighbors);
