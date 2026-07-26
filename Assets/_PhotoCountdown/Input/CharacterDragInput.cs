@@ -1,6 +1,7 @@
 using _PhotoCountdown.Gameplay.Characters;
 using _PhotoCountdown.Gameplay.Characters.Behaviours;
 using _PhotoCountdown.Gameplay.Slots;
+using _PhotoCountdown.Presentation.Characters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,11 +44,25 @@ namespace _PhotoCountdown.Input
             if (!hit)
                 return;
 
-            _draggedCharacter = hit.GetComponentInParent<LevelCharacter>();
+            LevelCharacter character = hit.GetComponentInParent<LevelCharacter>();
 
-            if (!_draggedCharacter)
+            if (!character)
                 return;
 
+            if (!character.CanBeDragged)
+            {
+                CharacterDragRejectFeedback feedback =
+                    character.GetComponent<CharacterDragRejectFeedback>();
+
+                if (!feedback)
+                    throw new MissingComponentException(
+                        $"{character.name} needs CharacterDragRejectFeedback.");
+
+                feedback.Play();
+                return;
+            }
+
+            _draggedCharacter = character;
             _draggedMover = _draggedCharacter.GetComponent<CharacterMover>();
             _draggedBehaviour = _draggedCharacter.GetComponent<CharacterBehaviourController>();
 
@@ -55,7 +70,8 @@ namespace _PhotoCountdown.Input
                 throw new MissingComponentException($"{_draggedCharacter.name} needs CharacterMover.");
 
             if (!_draggedBehaviour)
-                throw new MissingComponentException($"{_draggedCharacter.name} needs CharacterBehaviourController.");
+                throw new MissingComponentException(
+                    $"{_draggedCharacter.name} needs CharacterBehaviourController.");
 
             _dragOffset = _draggedCharacter.transform.position - pointerPosition;
 

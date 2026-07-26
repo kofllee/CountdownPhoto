@@ -15,7 +15,7 @@ namespace _PhotoCountdown.Gameplay.Characters
 
         public void Place(LevelCharacter character, CharacterSlot targetSlot)
         {
-            if (character.CurrentSlot == targetSlot)
+            if (!character.CanBeDragged || character.CurrentSlot == targetSlot)
                 return;
 
             LevelCharacter targetCharacter = FindAtSlot(targetSlot);
@@ -25,6 +25,9 @@ namespace _PhotoCountdown.Gameplay.Characters
                 character.SetSlot(targetSlot);
                 return;
             }
+
+            if (!targetCharacter.CanBeDragged)
+                return;
 
             CharacterSlot previousSlot = character.CurrentSlot;
             character.SetSlot(targetSlot);

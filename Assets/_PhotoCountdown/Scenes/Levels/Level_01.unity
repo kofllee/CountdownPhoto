@@ -2993,6 +2993,7 @@ GameObject:
   - component: {fileID: 1340419228}
   - component: {fileID: 1340419227}
   - component: {fileID: 1340419229}
+  - component: {fileID: 1340419231}
   m_Layer: 3
   m_Name: IT
   m_TagString: Untagged
@@ -3047,6 +3048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.LevelCharacter
   _initialSlot: {fileID: 261726027}
+  _canBeDragged: 0
 --- !u!210 &1340419226
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -3166,6 +3168,22 @@ PolygonCollider2D:
       - {x: 0.6102524, y: 0.79727983}
       - {x: -0.43058538, y: 3.3418863}
   m_UseDelaunayMesh: 1
+--- !u!114 &1340419231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340419220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f2bb902b7644b796e1bef3eb9dd65b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Characters.CharacterDragRejectFeedback
+  _visualRoot: {fileID: 977344123}
+  _duration: 0.22
+  _distance: 0.12
+  _cycles: 3
 --- !u!1 &1347355558
 GameObject:
   m_ObjectHideFlags: 0

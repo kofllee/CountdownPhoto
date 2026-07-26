@@ -366,13 +366,6 @@ namespace PhotoCountdown.Presentation.UI
                 return;
             }
 
-            if (sourceImage.type != Image.Type.Simple)
-            {
-                Debug.LogWarning(
-                    $"{name}: DashedUIImageOutline supports Image Type Simple only.",
-                    this);
-            }
-
             int shapeCount = sprite.GetPhysicsShapeCount();
 
             if (shapeCount == 0)

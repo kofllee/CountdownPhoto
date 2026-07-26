@@ -7,8 +7,10 @@ namespace _PhotoCountdown.Gameplay.Characters
     public class LevelCharacter: MonoBehaviour
     {
         [SerializeField] private CharacterSlot _initialSlot;
-        
+        [SerializeField] private bool _canBeDragged = true;
+
         public CharacterSlot InitialSlot => _initialSlot;
+        public bool CanBeDragged => _canBeDragged;
         public CharacterSlot CurrentSlot { get; private set; }
         public CharacterBehaviour CurrentBehaviour { get; private set; }
         public double BehaviourStartedAt { get; private set; }
