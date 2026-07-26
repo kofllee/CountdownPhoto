@@ -1,4 +1,5 @@
 using System;
+using _PhotoCountdown.Gameplay.Slots;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -13,7 +14,7 @@ namespace _PhotoCountdown.Gameplay.Characters
         [SerializeField] private int _dragSortingOrder = 1000;
 
         private LevelCharacter _character;
-        private int _normalSortingOrder;
+        private CharacterSlot _sortingSlot;
         private bool _isDragging;
         private Vector3 _dragPosition;
 
@@ -31,6 +32,9 @@ namespace _PhotoCountdown.Gameplay.Characters
 
         private void Awake()
         {
+            if (!_sortingGroup)
+                _sortingGroup = GetComponent<SortingGroup>();
+
             enabled = false;
         }
 
@@ -46,11 +50,8 @@ namespace _PhotoCountdown.Gameplay.Characters
                 throw new MissingReferenceException($"{character.name} has no current slot.");
 
             _character = character;
-
-            if (_sortingGroup)
-                _normalSortingOrder = _sortingGroup.sortingOrder;
-
             transform.position = _character.CurrentSlot.transform.position;
+            ApplySlotSortingOrder();
             enabled = true;
         }
 
@@ -71,19 +72,28 @@ namespace _PhotoCountdown.Gameplay.Characters
         public void EndDrag()
         {
             _isDragging = false;
-
-            if (_sortingGroup)
-                _sortingGroup.sortingOrder = _normalSortingOrder;
+            ApplySlotSortingOrder();
         }
 
         private void Update()
         {
+            if (!_isDragging && _sortingSlot != _character.CurrentSlot)
+                ApplySlotSortingOrder();
+
             Vector3 target = _isDragging
                 ? _dragPosition
                 : _character.CurrentSlot.transform.position;
 
             float t = 1f - Mathf.Exp(-_moveSpeed * Time.deltaTime);
             transform.position = Vector3.Lerp(transform.position, target, t);
+        }
+
+        private void ApplySlotSortingOrder()
+        {
+            _sortingSlot = _character.CurrentSlot;
+
+            if (_sortingGroup)
+                _sortingGroup.sortingOrder = _sortingSlot.SortingOrder;
         }
     }
 }

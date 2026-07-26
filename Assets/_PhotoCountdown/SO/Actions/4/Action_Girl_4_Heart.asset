@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c26be50feb36409eb4e7c558a8ea7bd2, type: 3}
   m_Name: Action_Girl_4_Heart
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Characters.Actions.CharacterActionDefinition
-  _displayName: 
+  _displayName: asd
   _spriteTracks:
   - _frames:
     - {fileID: -8196706169172302019, guid: a7a67285746318b4f937f716c3043f26, type: 3}
   _framesPerSecond: 6
-  _icon: {fileID: 0}
+  _icon: {fileID: -4248504846962462674, guid: 16b0a017e58a20846a27c59131680d11, type: 3}
   _enterSounds: []
   _enterSoundChance: 0.35
   _enterSoundVolume: 1

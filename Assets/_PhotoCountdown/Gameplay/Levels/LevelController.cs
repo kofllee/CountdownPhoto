@@ -40,6 +40,7 @@ namespace _PhotoCountdown.Gameplay.Levels
             ValidateReferences();
 
             LevelCharacter[] characters = _levelContentRoot.GetComponentsInChildren<LevelCharacter>(true);
+            CharacterSlot[] slots = _levelContentRoot.GetComponentsInChildren<CharacterSlot>(true);
             PhotoObjective[] objectives = _levelContentRoot.GetComponentsInChildren<PhotoObjective>(true);
             TimedDisappearInteraction[] interactions = _levelContentRoot.GetComponentsInChildren<TimedDisappearInteraction>(true);
 
@@ -51,11 +52,10 @@ namespace _PhotoCountdown.Gameplay.Levels
             foreach (LevelCharacter character in characters)
                 InitCharacterPresentation(character);
 
-            CharacterPlacementSystem placement =
-                new CharacterPlacementSystem(characters);
+            CharacterPlacementSystem placement = new CharacterPlacementSystem(characters);
             NeighborResolver neighbors = new NeighborResolver(characters);
 
-            _dragInput.Init(placement);
+            _dragInput.Init(placement, characters, slots);
             _clock.StartClock();
             
             foreach (TimedDisappearInteraction interaction in interactions)

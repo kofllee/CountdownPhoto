@@ -121,15 +121,42 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 804
-        height: 864
+        width: 1124
+        height: 1067
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: -34, y: -428.5}
+        - {x: 34, y: -372.5}
+        - {x: 43, y: -429.5}
+        - {x: 44, y: -431.5}
+        - {x: 108, y: -431.5}
+        - {x: 155, y: -340.5}
+        - {x: 148, y: -314.5}
+        - {x: 128, y: -247.5}
+        - {x: 106, y: -91.5}
+        - {x: 164, y: -36.5}
+        - {x: 164, y: 81.5}
+        - {x: 144, y: 136.5}
+        - {x: 126, y: 244.5}
+        - {x: 76, y: 349.5}
+        - {x: 38, y: 351.5}
+        - {x: -50, y: 351.5}
+        - {x: -105, y: 315.5}
+        - {x: -156, y: 227.5}
+        - {x: -145, y: 112.5}
+        - {x: -184, y: 57.5}
+        - {x: -184, y: -37.5}
+        - {x: -172, y: -80.5}
+        - {x: -93, y: -110.5}
+        - {x: -132, y: -279.5}
+        - {x: -146, y: -363.5}
+        - {x: -99, y: -431.5}
+        - {x: -35, y: -431.5}
+      tessellationDetail: 0.047
       bones: []
       spriteID: fac38ef4c766b52f0800000000000000
       internalID: -983079409547723601
@@ -151,7 +178,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":804.0,"y":864.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1124.0,"y":1067.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       "\u041A\u0430\u043F\u0440\u0438\u0437\u04301_0": -983079409547723601
   mipmapLimitGroupName: 

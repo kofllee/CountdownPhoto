@@ -4,39 +4,55 @@ using UnityEngine;
 
 namespace _PhotoCountdown.Gameplay.Characters
 {
-    public class CharacterPlacementSystem
+    public sealed class CharacterPlacementSystem
     {
-        private readonly IReadOnlyList<LevelCharacter> characters;
+        private readonly IReadOnlyList<LevelCharacter> _characters;
 
         public CharacterPlacementSystem(IReadOnlyList<LevelCharacter> characters)
         {
-            this.characters = characters;
+            _characters = characters;
+        }
+
+        public bool CanPlace(LevelCharacter character, CharacterSlot targetSlot)
+        {
+            if (!character || !targetSlot || !character.CanBeDragged)
+                return false;
+
+            if (character.CurrentSlot == targetSlot)
+                return false;
+
+            return FindAtSlot(targetSlot) == null;
+        }
+
+        public bool CanSwap(LevelCharacter first, LevelCharacter second)
+        {
+            if (!first || !second || first == second)
+                return false;
+
+            return first.CanBeDragged && second.CanBeDragged;
         }
 
         public void Place(LevelCharacter character, CharacterSlot targetSlot)
         {
-            if (!character.CanBeDragged || character.CurrentSlot == targetSlot)
+            if (!CanPlace(character, targetSlot))
                 return;
 
-            LevelCharacter targetCharacter = FindAtSlot(targetSlot);
-
-            if (!targetCharacter)
-            {
-                character.SetSlot(targetSlot);
-                return;
-            }
-
-            if (!targetCharacter.CanBeDragged)
-                return;
-
-            CharacterSlot previousSlot = character.CurrentSlot;
             character.SetSlot(targetSlot);
-            targetCharacter.SetSlot(previousSlot);
         }
-        
-        private LevelCharacter FindAtSlot(CharacterSlot slot)
+
+        public void Swap(LevelCharacter first, LevelCharacter second)
         {
-            foreach (LevelCharacter character in characters)
+            if (!CanSwap(first, second))
+                return;
+
+            CharacterSlot firstSlot = first.CurrentSlot;
+            first.SetSlot(second.CurrentSlot);
+            second.SetSlot(firstSlot);
+        }
+
+        public LevelCharacter FindAtSlot(CharacterSlot slot)
+        {
+            foreach (LevelCharacter character in _characters)
             {
                 if (character.CurrentSlot == slot)
                     return character;
