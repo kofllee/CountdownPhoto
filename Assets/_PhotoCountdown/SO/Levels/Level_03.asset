@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level_03
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Levels.LevelDefinition
   _id: level_03
-  _displayName: Level 3
+  _displayName: Photobomber
   _sceneName: Level_03
   _preview: {fileID: 0}
   _introComment: That passerby is ruining the shot!!!

@@ -192,8 +192,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.5987854, y: -151.8}
-  m_SizeDelta: {x: 228.9088, y: 52.3174}
+  m_AnchoredPosition: {x: 2.3049011, y: -160.1}
+  m_SizeDelta: {x: 269.8871, y: 52.3174}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &120790905
 MonoBehaviour:
@@ -242,14 +242,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1576,7 +1576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e1c2d96db14e06bc7c66a1f9f09ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Objectives.CharacterActionObjective
-  _description: It
+  _description: Not macho enough
   _character: {fileID: 1340419223}
   _requiredAction: {fileID: 11400000, guid: 318fcf3afe27c394b9a4bf2600b835e8, type: 2}
   _mustBeActive: 1
@@ -2113,8 +2113,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.5987854, y: -76.159}
-  m_SizeDelta: {x: 228.9088, y: 52.3174}
+  m_AnchoredPosition: {x: 2.3049011, y: -84.459}
+  m_SizeDelta: {x: 269.8871, y: 52.3174}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &768334707
 MonoBehaviour:
@@ -2163,14 +2163,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2628,8 +2628,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.5987854, y: -4.6999855}
-  m_SizeDelta: {x: 228.9088, y: 52.3174}
+  m_AnchoredPosition: {x: 2.3049011, y: -13}
+  m_SizeDelta: {x: 269.8871, y: 52.3174}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &978237573
 MonoBehaviour:
@@ -2678,14 +2678,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

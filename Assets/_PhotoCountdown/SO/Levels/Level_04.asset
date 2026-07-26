@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level_04
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Levels.LevelDefinition
   _id: level_04
-  _displayName: Level 4
+  _displayName: Heart Pose
   _sceneName: Level_04
   _preview: {fileID: 0}
   _introComment: "Maybe they\u2019ll pose differently if I rearrange them."
