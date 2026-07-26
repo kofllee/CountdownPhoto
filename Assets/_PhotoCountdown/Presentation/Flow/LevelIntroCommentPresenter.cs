@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _PhotoCountdown.Presentation.Audio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,9 @@ namespace _PhotoCountdown.Presentation.Flow
         [SerializeField, Min(0.01f)] private float _showDuration = 0.35f;
         [SerializeField, Min(0.01f)] private float _hideDuration = 0.25f;
         [SerializeField, Min(0f)] private float _hiddenOffset = 450f;
+        
+        [Header("Sound")]
+        [SerializeField] private AudioCuePlayer _showSound;
 
         private Vector2 _shownPosition;
         private bool _dismissRequested;
@@ -52,6 +56,8 @@ namespace _PhotoCountdown.Presentation.Flow
 
             _root.SetActive(true);
             _root.transform.SetAsLastSibling();
+            
+            _showSound.Play();
 
             Vector2 hiddenPosition = _shownPosition + Vector2.down * _hiddenOffset;
             _dialogPanel.anchoredPosition = hiddenPosition;
@@ -129,6 +135,9 @@ namespace _PhotoCountdown.Presentation.Flow
 
             if (_showDuration <= 0f || _hideDuration <= 0f)
                 throw new InvalidOperationException($"{name} has invalid animation duration.");
+            
+            if (!_showSound)
+                throw new MissingReferenceException($"{name} has no show sound.");
         }
 
         private void OnDestroy()

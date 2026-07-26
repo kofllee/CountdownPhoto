@@ -6,8 +6,8 @@ namespace _PhotoCountdown.Core.Settings
     public sealed class GameSettings
     {
         public const float DefaultMasterVolume = 1f;
-        public const float DefaultMusicVolume = 0.8f;
-        public const float DefaultEffectsVolume = 1f;
+        public const float DefaultMusicVolume = 0.7f;
+        public const float DefaultEffectsVolume = 0.7f;
 
         private float _masterVolume;
         private float _musicVolume;

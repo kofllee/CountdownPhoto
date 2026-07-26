@@ -642,9 +642,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15b52bd938647719087e8f823b3a3e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Flow.MainMenuSceneEntry
-  _audioInstaller: {fileID: 0}
+  _audioInstaller: {fileID: 685258410}
   _playButton: {fileID: 1121599532}
-  _settingsPanel: {fileID: 0}
+  _settingsPanel: {fileID: 602182246}
 --- !u!114 &602182246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -667,7 +667,7 @@ MonoBehaviour:
   _overlay: {fileID: 1721168547}
   _hiddenOffset: {x: 0, y: -800}
   _animationDuration: 0.25
-  _openSound: {fileID: 0}
+  _openSound: {fileID: 685258413}
 --- !u!1 &662381829
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,6 +1013,8 @@ GameObject:
   - component: {fileID: 685258411}
   - component: {fileID: 685258410}
   - component: {fileID: 685258409}
+  - component: {fileID: 685258413}
+  - component: {fileID: 685258412}
   m_Layer: 0
   m_Name: SceneAudio
   m_TagString: Untagged
@@ -1034,7 +1036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.ButtonSoundPlayer
   _buttonsRoot: {fileID: 848624929}
   _overrideSound: {fileID: 0}
-  _volume: 1
+  _volume: 0.6
 --- !u!114 &685258410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,7 +1049,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43f1ac46aaa45bdbd8018db0354de4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.SceneAudioInstaller
-  _audioClientsRoot: {fileID: 0}
 --- !u!4 &685258411
 Transform:
   m_ObjectHideFlags: 0
@@ -1063,6 +1064,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &685258412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685258408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97727f69e2e04b52bdd447fc48b9d660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.SceneMusicPlayer
+  _music: {fileID: 0}
+  _restartWhenSceneOpens: 0
+--- !u!114 &685258413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685258408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf9fa2e5f3cc4aa8845989f8a2413e77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.AudioCuePlayer
+  _sounds:
+  - {fileID: 8300000, guid: af6ec1c519c6c5c438a93cb7b3295192, type: 3}
+  _chance: 1
+  _volume: 1
 --- !u!1 &848624925
 GameObject:
   m_ObjectHideFlags: 0

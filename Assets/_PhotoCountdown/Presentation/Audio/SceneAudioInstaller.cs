@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _PhotoCountdown.Presentation.Audio
 {
     public sealed class SceneAudioInstaller : MonoBehaviour
     {
-        [SerializeField] private Transform _audioClientsRoot;
-
         private bool _isInitialized;
 
         public void Init(GameAudio audio)
@@ -17,11 +16,15 @@ namespace _PhotoCountdown.Presentation.Audio
             if (!audio)
                 throw new ArgumentNullException(nameof(audio));
 
-            Transform clientsRoot = _audioClientsRoot ? _audioClientsRoot : transform;
-            AudioClient[] clients = clientsRoot.GetComponentsInChildren<AudioClient>(true);
+            Scene scene = gameObject.scene;
 
-            foreach (AudioClient client in clients)
-                client.InitAudio(audio);
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                AudioClient[] clients = root.GetComponentsInChildren<AudioClient>(true);
+
+                foreach (AudioClient client in clients)
+                    client.InitAudio(audio);
+            }
 
             _isInitialized = true;
         }

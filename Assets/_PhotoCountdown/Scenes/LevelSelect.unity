@@ -815,6 +815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee0939f4c4e479e845f4a8401b46c8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Gameplay.Flow.LevelSelectSceneEntry
+  _audioInstaller: {fileID: 514348750}
   _itemsRoot: {fileID: 1567365521}
   _backButton: {fileID: 1131332688}
   _boardAnimation: {fileID: 1301981096}
@@ -1637,6 +1638,98 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 428989735}
   m_CullTransparentMesh: 1
+--- !u!1 &514348746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 514348751}
+  - component: {fileID: 514348750}
+  - component: {fileID: 514348749}
+  - component: {fileID: 514348748}
+  - component: {fileID: 514348747}
+  m_Layer: 0
+  m_Name: SceneAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &514348747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514348746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97727f69e2e04b52bdd447fc48b9d660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.SceneMusicPlayer
+  _music: {fileID: 0}
+  _restartWhenSceneOpens: 0
+--- !u!114 &514348748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514348746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf9fa2e5f3cc4aa8845989f8a2413e77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.AudioCuePlayer
+  _sounds:
+  - {fileID: 8300000, guid: af6ec1c519c6c5c438a93cb7b3295192, type: 3}
+  _chance: 1
+  _volume: 1
+--- !u!114 &514348749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514348746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce5a5cb87da48e88395361608a24d49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.ButtonSoundPlayer
+  _buttonsRoot: {fileID: 656230218}
+  _overrideSound: {fileID: 0}
+  _volume: 0.6
+--- !u!114 &514348750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514348746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43f1ac46aaa45bdbd8018db0354de4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_PhotoCountdown.Presentation.Audio.SceneAudioInstaller
+--- !u!4 &514348751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514348746}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 609.56067, y: 361.35858, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &585735571
 GameObject:
   m_ObjectHideFlags: 0
@@ -8036,3 +8129,4 @@ SceneRoots:
   - {fileID: 321877395}
   - {fileID: 1989610468}
   - {fileID: 2082544974}
+  - {fileID: 514348751}
